@@ -12,6 +12,9 @@
 		4F0A101F228B6B4C0082A761 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F0A101D228B6B4C0082A761 /* Main.storyboard */; };
 		4F0A1021228B6B4D0082A761 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F0A1020228B6B4D0082A761 /* Assets.xcassets */; };
 		4F0A1024228B6B4D0082A761 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F0A1022228B6B4D0082A761 /* LaunchScreen.storyboard */; };
+		4F0A102D228B6DEF0082A761 /* PluginOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0A102C228B6DEF0082A761 /* PluginOneViewController.swift */; };
+		4F0A1031228B6EA40082A761 /* PluginTwo.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 4F0A1030228B6EA40082A761 /* PluginTwo.mlmodel */; };
+		4F0A1033228B6F990082A761 /* PluginOneImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0A1032228B6F990082A761 /* PluginOneImageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,9 @@
 		4F0A1020228B6B4D0082A761 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F0A1023228B6B4D0082A761 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4F0A1025228B6B4D0082A761 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F0A102C228B6DEF0082A761 /* PluginOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginOneViewController.swift; sourceTree = "<group>"; };
+		4F0A1030228B6EA40082A761 /* PluginTwo.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = PluginTwo.mlmodel; sourceTree = "<group>"; };
+		4F0A1032228B6F990082A761 /* PluginOneImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PluginOneImageViewController.swift; path = ../../PluginOneImageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,12 +62,23 @@
 			children = (
 				4F0A1019228B6B4C0082A761 /* AppDelegate.swift */,
 				4F0A101B228B6B4C0082A761 /* ViewController.swift */,
+				4F0A102B228B6DB00082A761 /* New Group */,
 				4F0A101D228B6B4C0082A761 /* Main.storyboard */,
 				4F0A1020228B6B4D0082A761 /* Assets.xcassets */,
 				4F0A1022228B6B4D0082A761 /* LaunchScreen.storyboard */,
 				4F0A1025228B6B4D0082A761 /* Info.plist */,
 			);
 			path = Threshold;
+			sourceTree = "<group>";
+		};
+		4F0A102B228B6DB00082A761 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				4F0A102C228B6DEF0082A761 /* PluginOneViewController.swift */,
+				4F0A1032228B6F990082A761 /* PluginOneImageViewController.swift */,
+				4F0A1030228B6EA40082A761 /* PluginTwo.mlmodel */,
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,6 +153,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F0A101C228B6B4C0082A761 /* ViewController.swift in Sources */,
+				4F0A102D228B6DEF0082A761 /* PluginOneViewController.swift in Sources */,
+				4F0A1033228B6F990082A761 /* PluginOneImageViewController.swift in Sources */,
+				4F0A1031228B6EA40082A761 /* PluginTwo.mlmodel in Sources */,
 				4F0A101A228B6B4C0082A761 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
