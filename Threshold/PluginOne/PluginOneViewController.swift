@@ -16,11 +16,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var model: VNCoreMLModel!
     var request: VNCoreMLRequest!
     
-    
-    
     @IBOutlet weak var noLabel: UILabel!
-    
-    
+
     @IBOutlet weak var captureButton: UIButton!
     
     
@@ -28,7 +25,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var backCamera: AVCaptureDevice?
     var frontCamera: AVCaptureDevice?
     var currentCamera: AVCaptureDevice?
-    var gradientLayer: CAGradientLayer!
     
     var photoOutput: AVCapturePhotoOutput?
     var camerapreviewLayer: AVCaptureVideoPreviewLayer?
@@ -36,26 +32,24 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var framesSeen = UserDefaults.standard.integer(forKey: "framesSeen")
     var firstObservation: VNClassificationObservation?
     var imageSequenceNumber = 0
-    var screenLeftEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
+   
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
-    var storedImage = [UIImage]()
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        screenLeftEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedLeft))
-        screenLeftEdgeRecognizer.edges = .left
-        view.addGestureRecognizer(screenLeftEdgeRecognizer)
-        
+   
         screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
         screenRightEdgeRecognizer.edges = .right
         view.addGestureRecognizer(screenRightEdgeRecognizer)
         
         captureButton.createRectangleButton(buttonPositionX: 150, buttonPositionY: 650, buttonWidth: 100, buttonHeight: 100, buttonTilte: "")
         captureButton.backgroundColor = .green
+        captureButton.translatesAutoresizingMaskIntoConstraints = true
+        captureButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
         self.view.addSubview(captureButton)
+        
         
         
         let dataOutput = AVCaptureVideoDataOutput()
@@ -71,19 +65,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         request.imageCropAndScaleOption = .centerCrop
         //return request
         
-        DispatchQueue.main.async {
-            
-            if self.firstObservation?.identifier == "martin" {
-                
-                print("match")
-                self.hideCaptureButton()
-                
-            } else {
-                print("no match")
-                self.showCaptureButton()
-            }
-        }
-        
         
         setupCaptureSession()
         setupDevice()
@@ -91,6 +72,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupPreviewLayer()
         setupRunningCaptureSession()
         view.addSubview(noLabel)
+        updateOrientation()
         
     }
     
@@ -115,6 +97,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         self.noLabel.font = UIFont.systemFont(ofSize: 170, weight: UIFont.Weight.heavy)
         self.noLabel.textAlignment = .center
         self.noLabel.text = "computer says NO"
+        noLabel.translatesAutoresizingMaskIntoConstraints = true
+        noLabel.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
         
     }
@@ -146,7 +130,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             photoOutput = AVCapturePhotoOutput()
             photoOutput?.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])], completionHandler: nil)
             captureSession.addOutput(photoOutput!)
-            photoOutput?.connections[0].videoOrientation = AVCaptureVideoOrientation.portrait
+//            photoOutput?.connections[0].videoOrientation = AVCaptureVideoOrientation.portrait
         } catch {
             print(error)
         }
@@ -154,23 +138,46 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     func setupPreviewLayer() {
         camerapreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        
-        
-        gradientLayer = CAGradientLayer()
-        //        //gradientLayer?.frame = self.view.frame
-        //        gradientLayer.colors = [
-        //            UIColor.init(red: 255, green: 0, blue: 0, alpha: 1).cgColor,
-        //            UIColor.init(red: 255, green: 0, blue: 0, alpha: 1).cgColor,
-        //        ]
-        //        gradientLayer.locations = [0.0]
-        //        //        gradientLayer.locations = [0.0, 0.3]
-        //        self.view.layer.addSublayer(gradientLayer)
+
         camerapreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        camerapreviewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
+        //camerapreviewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         camerapreviewLayer?.frame = self.view.frame
+        
+        self.view.translatesAutoresizingMaskIntoConstraints = true
+        self.view.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
+        
         self.view.layer.insertSublayer(camerapreviewLayer!, at: 0)
         
     }
+    
+    func updateOrientation() {
+        let videoOrientation: AVCaptureVideoOrientation
+        switch UIDevice.current.orientation {
+        case .portrait:
+            videoOrientation = .portrait
+
+        case .portraitUpsideDown:
+            videoOrientation = .portraitUpsideDown
+
+        case .landscapeLeft:
+            videoOrientation = .landscapeRight
+
+        case .landscapeRight:
+            videoOrientation = .landscapeLeft
+
+        default:
+            videoOrientation = .portrait
+        }
+
+        camerapreviewLayer?.connection?.videoOrientation = videoOrientation
+    }
+
+    func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
+        updateOrientation()
+    }
+
     
     func  setupRunningCaptureSession() {
         captureSession.startRunning()
@@ -182,27 +189,20 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         if recognizer.state == .recognized {
             print("Right Edge")
             captureSession.stopRunning()
-            performSegue(withIdentifier: "PluginThreeSegue", sender: Any?.self)
+            performSegue(withIdentifier: "SegueFromPluginOneViewControllerToPluginTwoViewController", sender: Any?.self)
         }
     }
     
-    @objc func screenEdgeSwipedLeft(_ recognizer: UIScreenEdgePanGestureRecognizer) {
-        
-        if recognizer.state == .recognized {
-            print("Left Edge")
-            captureSession.stopRunning()
-            performSegue(withIdentifier: "BackTwoPluginSegue", sender: Any?.self)
-        }
-    }
+ 
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "PluginThreeSegue" {
-            UIView.animate(withDuration: 0.4) {
-                let toViewController = segue.destination as! PluginThreeViewController
-                toViewController.hero.modalAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .push(direction: .right))
-                toViewController.modalPresentationStyle = .overFullScreen
-                
-            }
+//            UIView.animate(withDuration: 0.4) {
+//                let toViewController = segue.destination as! PluginOneImageViewController
+//                toViewController.hero.modalAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .push(direction: .right))
+//                toViewController.modalPresentationStyle = .overFullScreen
+//
+//            }
             captureSession.stopRunning()
             
             
@@ -280,7 +280,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             let imageKey = "key\(imageSequenceNumber)"
             
             UserDefaults.standard.set(theImageData, forKey: imageKey)
-            performSegue(withIdentifier: "PluginTwoCapturedImageSegue", sender: nil)
+            performSegue(withIdentifier: "forwardPluginOneToImageViewController", sender: nil)
             
             print(imageKey)
             
@@ -291,7 +291,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         UIView.animate(withDuration: 0.5) {
             self.view.alpha = 1
             self.captureButton.alpha = 1
-            self.gradientLayer.removeFromSuperlayer()
             self.noLabel.isHidden = true
             return
         }
@@ -322,4 +321,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     }
     
 }
-
+extension UIDevice {
+    static func vibrate() {
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+    }
+}
