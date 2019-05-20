@@ -29,7 +29,7 @@
 		4F0A1025228B6B4D0082A761 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F0A102C228B6DEF0082A761 /* PluginOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginOneViewController.swift; sourceTree = "<group>"; };
 		4F0A1030228B6EA40082A761 /* PluginTwo.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = PluginTwo.mlmodel; sourceTree = "<group>"; };
-		4F0A1032228B6F990082A761 /* PluginOneImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PluginOneImageViewController.swift; path = ../../PluginOneImageViewController.swift; sourceTree = "<group>"; };
+		4F0A1032228B6F990082A761 /* PluginOneImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginOneImageViewController.swift; sourceTree = "<group>"; };
 		4F739948228F5B9600DF03A4 /* AppLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = AppLogo.jpg; path = Assets.xcassets/AppLogo.imageset/AppLogo.jpg; sourceTree = "<group>"; };
 		4FDE3CEB228C6F3D00557399 /* PluginTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginTwoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
