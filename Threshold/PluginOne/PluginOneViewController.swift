@@ -264,7 +264,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     @IBAction func captureButton(_ sender: Any) {
         
         // IF imageSequenceNumber is disabled PluginTwoImageViewController will return image from model
-        imageSequenceNumber += 1
+        //imageSequenceNumber += 1
         let settings = AVCapturePhotoSettings()
         photoOutput?.capturePhoto(with: settings, delegate: self)
         captureSession.stopRunning()

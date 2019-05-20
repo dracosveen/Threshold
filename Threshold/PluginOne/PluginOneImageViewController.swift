@@ -9,47 +9,48 @@
 import UIKit
 
 class PluginOneImageViewController: UIViewController {
-
+    
     @IBOutlet weak var imageView: UIImageView!
     
     @IBOutlet weak var SaveButton: UIButton!
     @IBOutlet weak var BackButton: UIButton!
+    var imageSequenceNumber = 0
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.SaveButton.frame = .init(x: 330, y: 40, width: 75, height: 75)
+        self.BackButton.frame = .init(x: 30, y: 40, width: 75, height: 75)
+        
+        SaveButton.translatesAutoresizingMaskIntoConstraints = true
+        BackButton.translatesAutoresizingMaskIntoConstraints = true
+        SaveButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
+        BackButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
+        
         showImage()
         // Do any additional setup after loading the view.
     }
     
     
     private func showImage() {
-        SaveButton.translatesAutoresizingMaskIntoConstraints = true
-        BackButton.translatesAutoresizingMaskIntoConstraints = true
-         SaveButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-        BackButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
+        imageView.frame = self.view.bounds
         
         imageView.translatesAutoresizingMaskIntoConstraints = true
         
-       imageView.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
+        imageView.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
         
-        let inputImage = UserDefaults.standard.data(forKey: "key\(1)")
+        let inputImage = UserDefaults.standard.data(forKey: "key\(imageSequenceNumber)")
         imageView.image = UIImage(data: inputImage!)
         
-        
-        
-        print(UserDefaults.standard.integer(forKey: "key\(1)"))
+        print(UserDefaults.standard.integer(forKey: "key\(imageSequenceNumber)"))
         
     }
-    
-    
     
     @IBAction func backButton(_ sender: Any) {
         
         performSegue(withIdentifier: "backButton", sender: Any?.self)
-        UserDefaults.standard.removeObject(forKey: "key\(1)")
+        UserDefaults.standard.removeObject(forKey: "key\(imageSequenceNumber)")
     }
     
     
@@ -71,7 +72,7 @@ class PluginOneImageViewController: UIViewController {
             }))
             present(ac, animated: true)
             
-            UserDefaults.standard.removeObject(forKey: "Key1")
+            UserDefaults.standard.removeObject(forKey: "key\(imageSequenceNumber)")
             
             
         }
