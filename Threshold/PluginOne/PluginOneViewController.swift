@@ -130,7 +130,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             photoOutput = AVCapturePhotoOutput()
             photoOutput?.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])], completionHandler: nil)
             captureSession.addOutput(photoOutput!)
-//            photoOutput?.connections[0].videoOrientation = AVCaptureVideoOrientation.portrait
+            photoOutput?.connections[0].videoOrientation = AVCaptureVideoOrientation.portrait
         } catch {
             print(error)
         }
@@ -140,7 +140,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         camerapreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
 
         camerapreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        //camerapreviewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
+        camerapreviewLayer?.connection?.videoOrientation = AVCaptureVideoOrientation.portrait
         camerapreviewLayer?.frame = self.view.frame
         
         self.view.translatesAutoresizingMaskIntoConstraints = true
