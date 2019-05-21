@@ -72,7 +72,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupPreviewLayer()
         setupRunningCaptureSession()
         view.addSubview(noLabel)
-        updateOrientation()
+        //updateOrientation()
         
     }
     
@@ -150,34 +150,28 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
     }
     
-    func updateOrientation() {
-        let videoOrientation: AVCaptureVideoOrientation
-        switch UIDevice.current.orientation {
-        case .portrait:
-            videoOrientation = .portrait
-
-        case .portraitUpsideDown:
-            videoOrientation = .portraitUpsideDown
-
-        case .landscapeLeft:
-            videoOrientation = .landscapeRight
-
-        case .landscapeRight:
-            videoOrientation = .landscapeLeft
-
-        default:
-            videoOrientation = .portrait
-        }
-
-        camerapreviewLayer?.connection?.videoOrientation = videoOrientation
-    }
-
-    func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (context) -> Void in
+            self.camerapreviewLayer?.connection?.videoOrientation = self.transformOrientation(orientation: UIInterfaceOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!)
+            self.camerapreviewLayer?.frame.size = self.view.frame.size
+        }, completion: { (context) -> Void in
+            
+        })
         super.viewWillTransition(to: size, with: coordinator)
-
-        updateOrientation()
     }
-
+    
+    func transformOrientation(orientation: UIInterfaceOrientation) -> AVCaptureVideoOrientation {
+        switch orientation {
+        case .landscapeLeft:
+            return .landscapeLeft
+        case .landscapeRight:
+            return .landscapeRight
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+        default:
+            return .portrait
+        }
+    }
     
     func  setupRunningCaptureSession() {
         captureSession.startRunning()
@@ -263,15 +257,13 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     @IBAction func captureButton(_ sender: Any) {
         
-        // IF imageSequenceNumber is disabled PluginTwoImageViewController will return image from model
-        //imageSequenceNumber += 1
         let settings = AVCapturePhotoSettings()
         photoOutput?.capturePhoto(with: settings, delegate: self)
         captureSession.stopRunning()
         
     }
     
-    
+
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let imageData = photo.fileDataRepresentation() {
             
@@ -286,6 +278,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             
         }
     }
+ 
     
     func showCaptureButton() {
         UIView.animate(withDuration: 0.5) {
@@ -301,17 +294,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             
             
             self.noLabel.isHidden = false
-            
-            //            self.gradientLayer?.frame = self.view.frame
-            //            self.gradientLayer.colors = [
-            //                UIColor.init(red: 255, green: 255, blue: 255, alpha: 1).cgColor,
-            //                UIColor.init(red: 255, green: 255, blue: 255, alpha: 1).cgColor,
-            //            ]
-            //            self.gradientLayer.locations = [0.0, 0.5]
-            //            self.gradientLayer.locations = [0.0, 0.5]
-            //            self.view.layer.addSublayer(self.gradientLayer)
-            
-            
             self.captureButton.alpha = 0
             
             return
