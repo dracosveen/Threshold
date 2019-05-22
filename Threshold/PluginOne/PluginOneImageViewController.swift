@@ -48,11 +48,9 @@ class PluginOneImageViewController: UIViewController {
     }
     
     @IBAction func backButton(_ sender: Any) {
-        
-        performSegue(withIdentifier: "backButton", sender: Any?.self)
+        dismiss(animated: true, completion: nil)
         UserDefaults.standard.removeObject(forKey: "key\(imageSequenceNumber)")
-        //self.performSegue(withIdentifier: "backButton", sender: self)
-        //dismiss(animated: true, completion: nil)
+ 
     }
     
     @IBAction func saveButton(_ sender: Any) {

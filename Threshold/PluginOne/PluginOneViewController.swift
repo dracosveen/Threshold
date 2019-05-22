@@ -72,7 +72,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupDevice()
         setupInputOutput()
         setupPreviewLayer()
-        //setupRunningCaptureSession()
         captureButtonLayout()
         view.addSubview(noLabel)
         
@@ -96,6 +95,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        captureSession.stopRunning()
     }
     
     func NoLabel() {
