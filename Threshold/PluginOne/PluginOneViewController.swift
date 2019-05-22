@@ -58,11 +58,10 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-   
+        
         screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
         screenRightEdgeRecognizer.edges = .right
         view.addGestureRecognizer(screenRightEdgeRecognizer)
-        
         
         let dataOutput = AVCaptureVideoDataOutput()
         dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
@@ -73,7 +72,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupDevice()
         setupInputOutput()
         setupPreviewLayer()
-        setupRunningCaptureSession()
+        //setupRunningCaptureSession()
         captureButtonLayout()
         view.addSubview(noLabel)
         
@@ -90,6 +89,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupRunningCaptureSession()
         NoLabel()
         
     }
@@ -256,13 +256,12 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         framesSeen += 1
         if framesSeen < 10 { return }
         framesSeen = 0
+        print(framesSeen)
         
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-        try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform(self.classificationRequests)
         //print(request)
         DispatchQueue.main.async {
-//            try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform(self.classificationRequests)
-//            try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform([self.request])
+            try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform(self.classificationRequests)
             
         }
         
@@ -287,7 +286,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             let imageKey = "key\(imageSequenceNumber)"
             
             UserDefaults.standard.set(theImageData, forKey: imageKey)
-            performSegue(withIdentifier: "forwardPluginOneToImageViewController", sender: nil)
+            performSegue(withIdentifier: "forwardPluginOneToImageViewController", sender: self)
             
             print(imageKey)
             

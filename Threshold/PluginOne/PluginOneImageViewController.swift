@@ -51,8 +51,9 @@ class PluginOneImageViewController: UIViewController {
         
         performSegue(withIdentifier: "backButton", sender: Any?.self)
         UserDefaults.standard.removeObject(forKey: "key\(imageSequenceNumber)")
+        //self.performSegue(withIdentifier: "backButton", sender: self)
+        //dismiss(animated: true, completion: nil)
     }
-    
     
     @IBAction func saveButton(_ sender: Any) {
         UIImageWriteToSavedPhotosAlbum(imageView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)    }
@@ -68,7 +69,8 @@ class PluginOneImageViewController: UIViewController {
             let ac = UIAlertController(title: "Saved!", message: "Image saved to library.", preferredStyle: .alert)
             //let backToVC = performSegue(withIdentifier: "backbutton", sender: self)
             ac.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self]_ in
-                self?.performSegue(withIdentifier: "backButton", sender: nil)
+                //self?.performSegue(withIdentifier: "backButton", sender: nil)
+                self!.dismiss(animated: true, completion: nil)
             }))
             present(ac, animated: true)
             
