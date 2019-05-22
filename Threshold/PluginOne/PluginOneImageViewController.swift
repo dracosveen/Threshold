@@ -67,8 +67,8 @@ class PluginOneImageViewController: UIViewController {
         } else {
             let ac = UIAlertController(title: "Saved!", message: "Image saved to library.", preferredStyle: .alert)
             //let backToVC = performSegue(withIdentifier: "backbutton", sender: self)
-            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                self.performSegue(withIdentifier: "backButton", sender: nil)
+            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self]_ in
+                self?.performSegue(withIdentifier: "backButton", sender: nil)
             }))
             present(ac, animated: true)
             

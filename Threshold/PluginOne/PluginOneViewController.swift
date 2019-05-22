@@ -13,9 +13,6 @@ import AVFoundation
 
 class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    var model: VNCoreMLModel!
-    var request: VNCoreMLRequest!
-    
     @IBOutlet weak var noLabel: UILabel!
 
     @IBOutlet weak var captureButton: UIButton!
@@ -34,8 +31,30 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var imageSequenceNumber = 0
    
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
+    var classificationRequests = [VNCoreMLRequest]()
     
+    lazy var visionModel: VNCoreMLModel = {
+        do {
+            let pluginTwo = PluginTwo()
+            return try VNCoreMLModel(for: pluginTwo.model)
+        } catch {
+            fatalError("Failed to create VNCoreMLModel: \(error)")
+        }
+    }()
+    var inflightBuffer = 0
+    static let maxInflightBuffers = 2
     
+    func setUpVision() {
+        for _ in 0..<PluginOneViewController.maxInflightBuffers {
+            let request = VNCoreMLRequest(model: visionModel, completionHandler: {
+                [weak self] request, error in
+                self?.processQuery(for: request, error: error)
+            })
+            
+            request.imageCropAndScaleOption = .centerCrop
+            classificationRequests.append(request)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,39 +63,30 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         screenRightEdgeRecognizer.edges = .right
         view.addGestureRecognizer(screenRightEdgeRecognizer)
         
+        
+        let dataOutput = AVCaptureVideoDataOutput()
+        dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
+        captureSession.addOutput(dataOutput)
+        
+        setUpVision()
+        setupCaptureSession()
+        setupDevice()
+        setupInputOutput()
+        setupPreviewLayer()
+        setupRunningCaptureSession()
+        captureButtonLayout()
+        view.addSubview(noLabel)
+        
+    }
+    
+    func captureButtonLayout() {
         captureButton.createRectangleButton(buttonPositionX: 150, buttonPositionY: 650, buttonWidth: 100, buttonHeight: 100, buttonTilte: "")
         captureButton.backgroundColor = .green
         captureButton.translatesAutoresizingMaskIntoConstraints = true
         captureButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
         self.view.addSubview(captureButton)
         
-        
-        
-        let dataOutput = AVCaptureVideoDataOutput()
-        dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
-        captureSession.addOutput(dataOutput)
-        
-        /*PluginTwo.mlmodel = AvocadoToast and Fedora Hats */
-        model = try? VNCoreMLModel(for: PluginTwo().model)
-        
-        request = VNCoreMLRequest(model: model, completionHandler: { [weak self] request, error in
-            self?.processQuery(for: request, error: error)
-        })
-        request.imageCropAndScaleOption = .centerCrop
-        //return request
-        
-        
-        setupCaptureSession()
-        setupDevice()
-        setupInputOutput()
-        setupPreviewLayer()
-        setupRunningCaptureSession()
-        view.addSubview(noLabel)
-        //updateOrientation()
-        
     }
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -248,9 +258,14 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         framesSeen = 0
         
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-        
+        try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform(self.classificationRequests)
         //print(request)
-        try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform([request])
+        DispatchQueue.main.async {
+//            try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform(self.classificationRequests)
+//            try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform([self.request])
+            
+        }
+        
     }
     
     
