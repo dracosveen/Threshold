@@ -21,7 +21,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Dexription again</string>
+	<string>Description</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Description</string>
 	<key>NSPhotoLibraryUsageDescription</key>

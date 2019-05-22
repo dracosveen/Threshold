@@ -17,7 +17,6 @@
 		4F0A1033228B6F990082A761 /* PluginOneImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0A1032228B6F990082A761 /* PluginOneImageViewController.swift */; };
 		4F739949228F5B9600DF03A4 /* AppLogo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F739948228F5B9600DF03A4 /* AppLogo.jpg */; };
 		4FDE3CEC228C6F3D00557399 /* PluginTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDE3CEB228C6F3D00557399 /* PluginTwoViewController.swift */; };
-		4FFBB07F22959A4800CCE88A /* File in Resources */ = {isa = PBXBuildFile; fileRef = 4FFBB07E22959A4800CCE88A /* File */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +32,6 @@
 		4F0A1032228B6F990082A761 /* PluginOneImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginOneImageViewController.swift; sourceTree = "<group>"; };
 		4F739948228F5B9600DF03A4 /* AppLogo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = AppLogo.jpg; path = Assets.xcassets/AppLogo.imageset/AppLogo.jpg; sourceTree = "<group>"; };
 		4FDE3CEB228C6F3D00557399 /* PluginTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginTwoViewController.swift; sourceTree = "<group>"; };
-		4FFBB07E22959A4800CCE88A /* File */ = {isa = PBXFileReference; lastKnownFileType = text; name = File; path = ../../../../../File; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +81,6 @@
 			isa = PBXGroup;
 			children = (
 				4F0A102C228B6DEF0082A761 /* PluginOneViewController.swift */,
-				4FFBB07E22959A4800CCE88A /* File */,
 				4F0A1032228B6F990082A761 /* PluginOneImageViewController.swift */,
 				4F0A1030228B6EA40082A761 /* PluginTwo.mlmodel */,
 			);
@@ -161,7 +158,6 @@
 				4F0A1024228B6B4D0082A761 /* LaunchScreen.storyboard in Resources */,
 				4F0A1021228B6B4D0082A761 /* Assets.xcassets in Resources */,
 				4F0A101F228B6B4C0082A761 /* Main.storyboard in Resources */,
-				4FFBB07F22959A4800CCE88A /* File in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

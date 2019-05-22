@@ -79,7 +79,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     func captureButtonLayout() {
         captureButton.createRectangleButton(buttonPositionX: 150, buttonPositionY: 650, buttonWidth: 100, buttonHeight: 100, buttonTilte: "")
-        captureButton.backgroundColor = .green
+        captureButton.backgroundColor = .white
         captureButton.translatesAutoresizingMaskIntoConstraints = true
         captureButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
         self.view.addSubview(captureButton)
@@ -103,10 +103,10 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         self.noLabel.textColor = .red
         self.noLabel.frame.size = .init(width: 414, height: 896)
         self.noLabel.adjustsFontSizeToFitWidth = true
-        self.noLabel.numberOfLines = 3
+        self.noLabel.numberOfLines = 0
         self.noLabel.font = UIFont.systemFont(ofSize: 170, weight: UIFont.Weight.heavy)
         self.noLabel.textAlignment = .center
-        self.noLabel.text = "computer says NO"
+        self.noLabel.text = "computer \nsays NO"
         noLabel.translatesAutoresizingMaskIntoConstraints = true
         noLabel.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
@@ -266,8 +266,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
         
     }
-    
-    
     
     @IBAction func captureButton(_ sender: Any) {
         
