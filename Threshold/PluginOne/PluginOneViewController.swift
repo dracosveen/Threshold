@@ -257,32 +257,30 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             
         }
     }
-    
-    
-    
+
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         framesSeen += 1
         if framesSeen < 10 { return }
         framesSeen = 0
-
         
         
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         //print(request)
         semaphore.wait()
+        
         DispatchQueue.main.async {
             try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform(self.classificationRequests)
             self.semaphore.signal()
         }
         
     }
+ 
     
     @IBAction func captureButton(_ sender: Any) {
         
         let settings = AVCapturePhotoSettings()
         photoOutput?.capturePhoto(with: settings, delegate: self)
-        captureSession.stopRunning()
         
     }
     
@@ -326,10 +324,9 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     }
     
 }
-extension UIDevice {
-    static func vibrate() {
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-    }
-}
-
+//extension UIDevice {
+//    static func vibrate() {
+//        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//    }
+//}
 
