@@ -32,6 +32,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
    
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
     var classificationRequests = [VNCoreMLRequest]()
+    let semaphore = DispatchSemaphore(value: PluginOneViewController.maxInflightBuffers)
     
     lazy var visionModel: VNCoreMLModel = {
         do {
@@ -52,8 +53,14 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             })
             
             request.imageCropAndScaleOption = .centerCrop
+
             classificationRequests.append(request)
         }
+        
+        framesSeen += 1
+        if framesSeen < 10 { return }
+        framesSeen = 0
+        print(framesSeen)
     }
     
     override func viewDidLoad() {
@@ -97,6 +104,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         super.viewWillDisappear(animated)
         captureSession.stopRunning()
     }
+    
+    
     
     func NoLabel() {
         
@@ -256,13 +265,15 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         framesSeen += 1
         if framesSeen < 10 { return }
         framesSeen = 0
-        print(framesSeen)
+
+        
         
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         //print(request)
+        semaphore.wait()
         DispatchQueue.main.async {
             try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform(self.classificationRequests)
-            
+            self.semaphore.signal()
         }
         
     }
@@ -320,3 +331,5 @@ extension UIDevice {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
 }
+
+
