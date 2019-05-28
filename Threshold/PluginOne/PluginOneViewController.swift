@@ -66,6 +66,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
         screenRightEdgeRecognizer.edges = .right
         view.addGestureRecognizer(screenRightEdgeRecognizer)
@@ -115,10 +117,9 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         self.noLabel.numberOfLines = 0
         self.noLabel.font = UIFont.systemFont(ofSize: 170, weight: UIFont.Weight.heavy)
         self.noLabel.textAlignment = .center
-        self.noLabel.text = "computer \nsays NO"
         noLabel.translatesAutoresizingMaskIntoConstraints = true
         noLabel.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        
         
     }
     
@@ -312,11 +313,11 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     func hideCaptureButton() {
         UIView.animate(withDuration: 0.2, delay: 0.1, options: .transitionCrossDissolve, animations: {
-            
-            
             self.noLabel.isHidden = false
-            self.captureButton.alpha = 0
             
+            self.captureButton.alpha = 0
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            self.noLabel.text = "computer \nsays NO"
             return
         })
         
