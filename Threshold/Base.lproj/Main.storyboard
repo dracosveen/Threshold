@@ -33,6 +33,7 @@
                         <viewLayoutGuide key="safeArea" id="Cwm-Zs-OGN"/>
                     </view>
                     <connections>
+                        <outlet property="StayTunedLabel" destination="5Qk-ZS-z1O" id="UXI-GK-yyu"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="SegueFromPluginTwoViewControllerToPluginOneViewController" id="Tr3-fm-xnn"/>
                     </connections>
                 </viewController>
@@ -58,7 +59,6 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IAI-zf-x8F">
                                 <rect key="frame" x="148" y="686" width="119" height="88"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
                                 <connections>
                                     <action selector="captureButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eVa-v4-scb"/>
                                 </connections>
@@ -123,6 +123,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="gKZ-IY-YJH"/>
+        <segue reference="Tr3-fm-xnn"/>
     </inferredMetricsTieBreakers>
 </document>

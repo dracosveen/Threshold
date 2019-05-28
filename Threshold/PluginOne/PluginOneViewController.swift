@@ -27,7 +27,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var camerapreviewLayer: AVCaptureVideoPreviewLayer?
     
     var framesSeen = UserDefaults.standard.integer(forKey: "framesSeen")
-    var firstObservation: VNClassificationObservation?
     var imageSequenceNumber = 0
    
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
@@ -65,9 +64,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
         screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
         screenRightEdgeRecognizer.edges = .right
         view.addGestureRecognizer(screenRightEdgeRecognizer)
@@ -83,15 +79,21 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupPreviewLayer()
         captureButtonLayout()
         view.addSubview(noLabel)
+        view.addSubview(captureButton)
         
     }
     
-    func captureButtonLayout() {
-        captureButton.createRectangleButton(buttonPositionX: 150, buttonPositionY: 650, buttonWidth: 100, buttonHeight: 100, buttonTilte: "")
+   private func captureButtonLayout() {
+        captureButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        captureButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
+        captureButton.widthAnchor.constraint(equalToConstant: 118).isActive = true
+        captureButton.heightAnchor.constraint(equalToConstant: 118).isActive = true
         captureButton.backgroundColor = .white
-        captureButton.translatesAutoresizingMaskIntoConstraints = true
-        captureButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-        self.view.addSubview(captureButton)
+        captureButton.translatesAutoresizingMaskIntoConstraints = false
+        captureButton.layer.cornerRadius = captureButton.frame.width / 2
+        captureButton.layer.borderColor = UIColor.black.cgColor
+        captureButton.layer.borderWidth = 10
+        captureButton.clipsToBounds = true
         
     }
     
@@ -110,17 +112,12 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     
     func NoLabel() {
-        
+        noLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         self.noLabel.textColor = .red
-        self.noLabel.frame.size = .init(width: 414, height: 896)
         self.noLabel.adjustsFontSizeToFitWidth = true
         self.noLabel.numberOfLines = 0
         self.noLabel.font = UIFont.systemFont(ofSize: 170, weight: UIFont.Weight.heavy)
         self.noLabel.textAlignment = .center
-        noLabel.translatesAutoresizingMaskIntoConstraints = true
-        noLabel.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-        
-        
     }
     
     
@@ -207,23 +204,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
     }
     
- 
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "PluginThreeSegue" {
-//            UIView.animate(withDuration: 0.4) {
-//                let toViewController = segue.destination as! PluginOneImageViewController
-//                toViewController.hero.modalAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .push(direction: .right))
-//                toViewController.modalPresentationStyle = .overFullScreen
-//
-//            }
-            captureSession.stopRunning()
-            
-            
-            print("preparing animation")
-            
-        }
-    }
     
     func processQuery(for request: VNRequest, error: Error?, k: Int = 5) {
         DispatchQueue.main.async {
@@ -248,6 +228,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             if distanceArray[0] < 21 {
                 print ("match")
                 print(distanceArray[0])
+                print(numReferenceImages)
                 self.hideCaptureButton()
                 
             } else {
@@ -307,27 +288,22 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             self.view.alpha = 1
             self.captureButton.alpha = 1
             self.noLabel.isHidden = true
-            return
+
         }
     }
     
     func hideCaptureButton() {
         UIView.animate(withDuration: 0.2, delay: 0.1, options: .transitionCrossDissolve, animations: {
             self.noLabel.isHidden = false
-            
             self.captureButton.alpha = 0
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            self.noLabel.text = "computer \nsays NO"
-            return
+            self.noLabel.text = "computer says NO"
+            
         })
         
         
     }
     
 }
-//extension UIDevice {
-//    static func vibrate() {
-//        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-//    }
-//}
+
 

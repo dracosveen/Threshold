@@ -10,7 +10,10 @@ import UIKit
 
 class PluginTwoViewController: UIViewController {
 
-     var screenLeftEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
+    
+    @IBOutlet weak var StayTunedLabel: UILabel!
+    
+    var screenLeftEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +23,11 @@ class PluginTwoViewController: UIViewController {
         view.addGestureRecognizer(screenLeftEdgeRecognizer)
 
         // Do any additional setup after loading the view.
+        
+        StayTunedLabel.textAlignment = .center
+        StayTunedLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        StayTunedLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+    
     }
     
     
@@ -27,7 +35,7 @@ class PluginTwoViewController: UIViewController {
         
         if recognizer.state == .recognized {
             print("Left Edge")
-            performSegue(withIdentifier: "SegueFromPluginTwoViewControllerToPluginOneViewController", sender: Any?.self)
+            dismiss(animated: true, completion: nil)
         }
     }
 
