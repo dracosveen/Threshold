@@ -132,6 +132,9 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     
     func NoLabel() {
+        // Hide the label initially
+        self.noLabel.isHidden = true
+        
         self.noLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         self.noLabel.widthAnchor.constraint(equalToConstant: 750).isActive = true
         self.noLabel.heightAnchor.constraint(equalToConstant: 750).isActive = true

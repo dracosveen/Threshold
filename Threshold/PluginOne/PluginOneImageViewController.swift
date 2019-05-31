@@ -14,42 +14,14 @@ class PluginOneImageViewController: UIViewController {
     
     @IBOutlet weak var SaveButton: UIButton!
     @IBOutlet weak var BackButton: UIButton!
+    
     var imageSequenceNumber = 0
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        SaveButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-//        BackButton.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
-        
         showImage()
-        ButtonLayout()
+        
         // Do any additional setup after loading the view.
-    }
-    
-    private func ButtonLayout() {
-        BackButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
-        BackButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor)
-        BackButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
-        BackButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-        
-        SaveButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor)
-        SaveButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor)
-        SaveButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
-        SaveButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-        
-        SaveButton.translatesAutoresizingMaskIntoConstraints = false
-        BackButton.translatesAutoresizingMaskIntoConstraints = false
-        //SaveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        SaveButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 35).isActive = true
-        SaveButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30).isActive = true
-        BackButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 50).isActive = true
-        BackButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40).isActive = true
-        
-        SaveButton.widthAnchor.constraint(equalToConstant: 75).isActive = true
-        SaveButton.heightAnchor.constraint(equalToConstant: 75).isActive = true
-    
     }
     
     private func showImage() {
