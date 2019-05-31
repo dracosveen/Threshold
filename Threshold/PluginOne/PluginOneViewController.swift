@@ -77,24 +77,44 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupDevice()
         setupInputOutput()
         setupPreviewLayer()
-        captureButtonLayout()
+//        captureButtonLayout()
         view.addSubview(noLabel)
-        view.addSubview(captureButton)
+        
         
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        captureButtonLayout()
+        view.addSubview(captureButton)
+    }
+    
    private func captureButtonLayout() {
+    
+        // Size the button in preportion to the view
+        let buttonSize = view.frame.width * 0.25
+    
+        // Distance from bottom of the view
+        let distanceFromBottom: CGFloat = 80.0
+    
+        // Position the button
         captureButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        captureButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
-        captureButton.widthAnchor.constraint(equalToConstant: 118).isActive = true
-        captureButton.heightAnchor.constraint(equalToConstant: 118).isActive = true
+        captureButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: distanceFromBottom * -1).isActive = true
+    
+        // Set the button size
+        captureButton.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        captureButton.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
+    
+        // Set the corder radius
+        captureButton.layer.cornerRadius = buttonSize / 2
+        captureButton.clipsToBounds = true
+    
+        // Style the button
         captureButton.backgroundColor = .white
         captureButton.translatesAutoresizingMaskIntoConstraints = false
-        captureButton.layer.cornerRadius = captureButton.frame.width / 2
         captureButton.layer.borderColor = UIColor.black.cgColor
         captureButton.layer.borderWidth = 10
-        captureButton.clipsToBounds = true
-        
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,12 +132,15 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     
     func NoLabel() {
-        noLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        self.noLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        self.noLabel.widthAnchor.constraint(equalToConstant: 750).isActive = true
+        self.noLabel.heightAnchor.constraint(equalToConstant: 750).isActive = true
         self.noLabel.textColor = .red
         self.noLabel.adjustsFontSizeToFitWidth = true
         self.noLabel.numberOfLines = 0
         self.noLabel.font = UIFont.systemFont(ofSize: 170, weight: UIFont.Weight.heavy)
         self.noLabel.textAlignment = .center
+        self.noLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
     
