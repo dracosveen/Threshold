@@ -85,6 +85,31 @@
             </objects>
             <point key="canvasLocation" x="63.768115942028992" y="18.75"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="JX2-6r-Vx6">
+            <objects>
+                <viewController id="MdH-6N-CyG" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="hqh-fL-yrP">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="g17-FO-Q6s">
+                                <rect key="frame" x="87" y="241" width="240" height="317"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="Guy-I2-AlI"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cCJ-NQ-w8I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="89.855072463768124" y="720.53571428571422"/>
+        </scene>
         <!--Plugin One Image View Controller-->
         <scene sceneID="9Py-XX-W4y">
             <objects>
@@ -133,7 +158,6 @@
                         <outlet property="BackButton" destination="4ky-Mw-F8z" id="uqg-mg-gHv"/>
                         <outlet property="SaveButton" destination="YQH-bY-iiE" id="nPj-mE-aOU"/>
                         <outlet property="imageView" destination="YyD-nm-RTI" id="OLS-5u-sk2"/>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="backButton" id="gKZ-IY-YJH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="we4-yz-oDv" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -141,7 +165,4 @@
             <point key="canvasLocation" x="785.50724637681162" y="18.75"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="gKZ-IY-YJH"/>
-    </inferredMetricsTieBreakers>
 </document>
