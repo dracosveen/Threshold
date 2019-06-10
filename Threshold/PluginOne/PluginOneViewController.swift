@@ -257,7 +257,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             if distanceArray[0] < 18 {
                 print ("match")
                 print(distanceArray[0])
-                print(numReferenceImages)
                 self.hideCaptureButton()
                 
             } else {
