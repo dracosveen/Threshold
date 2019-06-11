@@ -35,8 +35,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     lazy var visionModel: VNCoreMLModel = {
         do {
-            let personalWork = PersonalWork()
-            return try VNCoreMLModel(for: personalWork.model)
+            let theModel = RedHook()
+            return try VNCoreMLModel(for: theModel.model)
         } catch {
             fatalError("Failed to create VNCoreMLModel: \(error)")
         }
@@ -251,10 +251,11 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             
             let sorted = distanceArray.enumerated().sorted(by: {$0.element < $1.element})
             let knn = sorted[..<min(k, numReferenceImages)]
-            
+            print(String(describing: knn))
+            print(numReferenceImages)
             
             // Threshold value
-            if distanceArray[0] < 18 {
+            if distanceArray[0] < 22 {
                 print ("match")
                 print(distanceArray[0])
                 self.hideCaptureButton()
@@ -263,6 +264,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                 print ("no match")
                 print(distanceArray[0])
                 self.showCaptureButton()
+                let distArray = String(format:"%.2f",(distanceArray[0]))
+                self.captureButton.setTitle(distArray, for: .normal)
             }
             
         }
