@@ -53,43 +53,9 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                              ModelData(id: 9, imageName: "shirt2")
         
     ]
- 
-    /*
-    // ML Model
-    lazy var visionModel: VNCoreMLModel = {
-        do {
-            let theModel = rembrandtplein()
-            return try VNCoreMLModel(for: theModel.model)
-        } catch {
-            fatalError("Failed to create VNCoreMLModel: \(error)")
-        }
-    }()
-    var inflightBuffer = 0
-    static let maxInflightBuffers = 2
     
-    func setUpVision() {
-        for _ in 0..<PluginOneViewController.maxInflightBuffers {
-            let request = VNCoreMLRequest(model: visionModel, completionHandler: {
-                [weak self] request, error in
-                self?.processQuery(for: request, error: error)
-            })
-
-            request.imageCropAndScaleOption = .centerCrop
-
-            classificationRequests.append(request)
-        }
-
-        framesSeen += 1
-        if framesSeen < 10 { return }
-        framesSeen = 0
-        print(framesSeen)
-    }
- 
- */
-    
-
     // Popup the runs the first time
-    let firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
+    //let firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
     
     // ViewDidLoad
     override func viewDidLoad() {
@@ -117,13 +83,13 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         view.addSubview(noLabel)
         
         // First run
-        
+        /*
         if firstRun {
             animateIn()
         } else {
             runFirst() //will only run once
         }
-        
+        */
         
     }
     
@@ -312,47 +278,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
     }
     
-    /* PROCESSQUERY FOR IMAGE SIMILARITY WITH ML
-    func processQuery(for request: VNRequest, error: Error?, k: Int = 5) {
-        DispatchQueue.main.async {
-            guard let results = request.results else {
-                //self.referenceRanking.text = "Unable to rank image.\n\(error!.localizedDescription)"
-                return
-            }
-            
-            let queryResults = results as! [VNCoreMLFeatureValueObservation]
-            let distances = queryResults.first!.featureValue.multiArrayValue!
-            
-            // Create an array of distances to sort
-            let numReferenceImages = distances.shape[0].intValue
-            var distanceArray = [Double]()
-            for r in 0..<numReferenceImages {
-                distanceArray.append(Double(truncating: distances[r]))
-            }
-            
-            let sorted = distanceArray.enumerated().sorted(by: {$0.element < $1.element})
-            let knn = sorted[..<min(k, numReferenceImages)]
-            print(String(describing: knn))
-            print(numReferenceImages)
-            
-            // Threshold value
-            if distanceArray[0] < 18.5 {
-                print ("match")
-                print(distanceArray[0])
-                self.hideCaptureButton()
-                
-            } else {
-                print ("no match")
-                print(distanceArray[0])
-                self.showCaptureButton()
-                let distArray = String(format:"%.2f",(distanceArray[0]))
-                self.captureButton.setTitle(distArray, for: .normal)
-            }
-            
-        }
-    }
- */
-    
     func processImages(image: CVPixelBuffer)
     {
         
@@ -419,14 +344,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         
         processImages(image: pixelBuffer)
-        
-        //print(pixelBuffer)
-       // semaphore.wait()
-        
-//        DispatchQueue.main.async {
-//            try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform(self.classificationRequests)
-//            //self.semaphore.signal()
-//        }
         
     }
  
