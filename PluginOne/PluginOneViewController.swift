@@ -343,6 +343,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         
+        
         processImages(image: pixelBuffer)
         
     }
@@ -361,7 +362,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         if let imageData = photo.fileDataRepresentation() {
             
             let newImage = UIImage(data: imageData)?.fixedOrientation() // It is the image
-            let theImageData:NSData = newImage!.pngData()! as NSData
+            let theImageData:NSData = newImage!.jpegData(compressionQuality: 8)! as NSData
             let imageKey = "key\(imageSequenceNumber)"
             
             UserDefaults.standard.set(theImageData, forKey: imageKey)
