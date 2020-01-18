@@ -35,7 +35,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var effect:UIVisualEffect!
    
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
-    var classificationRequests = [VNCoreMLRequest]()
    // let semaphore = DispatchSemaphore(value: PluginOneViewController.maxInflightBuffers)
     lazy  var storedImage = UserDefaults.standard.data(forKey: "key\(imageSequenceNumber)")
     
@@ -50,7 +49,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                              ModelData(id: 6, imageName: "purify2"),
                              ModelData(id: 7, imageName: "soup"),
                              ModelData(id: 8, imageName: "shirt"),
-                             ModelData(id: 9, imageName: "shirt2")
+                             ModelData(id: 9, imageName: "shirt2"),
+                             ModelData(id: 10, imageName: "beer")
         
     ]
     
@@ -144,7 +144,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         super.viewWillDisappear(animated)
         captureSession.stopRunning()
     }
-    
+    /*
     func animateIn() {
         self.view.addSubview(addItemView)
         addItemView.center = self.view.center
@@ -159,7 +159,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
         
     }
-    
+    */
     
     func animateOut () {
         UIView.animate(withDuration: 0.3, animations: {
@@ -284,13 +284,13 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         guard self.modelData.count > 0 else{
             return
         }
-
+        
         var observation : VNFeaturePrintObservation? // local images
         var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
-    
-//        sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
+        
+        //        sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
         sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
-
+        
         var tempData = modelData
         
         tempData = modelData.enumerated().map { (i,m) in
@@ -303,24 +303,27 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                     if let sourceObservation = sourceObservation{
                         try observation?.computeDistance(&distance, to: sourceObservation)
                         model.distance = "\(distance)"
+                        var distanceValue = [distance]
                         // Threshold value
-                              if distance < 12 {
+                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+                            print(distance)
+                            print(model.imageName)
+                            self.showCaptureButton()
+                            let distanceTwo = String(format:"%.2f",(distance))
+                            self.captureButton.setTitle(distanceTwo, for: .normal)
+                            
+                            
+                            if distance < 18.5 {
                                 print(distance)
                                 print(model.imageName)
                                 print ("match")
+                                sleep(1)
                                 self.hideCaptureButton()
-                                  
-                              } else {
-                                print(distance)
-                                print(model.imageName)
-                                print ("no match")
-                                self.showCaptureButton()
-                                let distanceTwo = String(format:"%.2f",(distance))
-                                DispatchQueue.main.async {
-                                self.captureButton.setTitle(distanceTwo, for: .normal)
-                                }
-                                  
-                              }
+                                print("sleeping")
+                                
+                            }
+                            
+                        }
                         
                     }
                 } catch {
@@ -328,7 +331,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                 }
                 
             }
-            
             return model
         }
         //ONLY needed if results will be returned in sorted order
@@ -347,7 +349,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         processImages(image: pixelBuffer)
         
     }
- 
     
     
     @IBAction func captureButton(_ sender: Any) {
@@ -400,7 +401,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     func showCaptureButton() {
         DispatchQueue.main.async {
-        UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.5) {
                 self.view.alpha = 1
                 self.noLabel.isHidden = true
                 self.captureButton.alpha = 1
@@ -408,20 +409,16 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
     }
     
-    func hideCaptureButton() {
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.2, delay: 0.1, options: .transitionCrossDissolve, animations: {
-                self.captureButton.alpha = 0
+        func hideCaptureButton() {
+            DispatchQueue.main.async {
+             self.captureButton.alpha = 0
                 self.noLabel.isHidden = false
                 self.noLabel.text = "computer says NO"
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            }
-            )}
-        
+                }
+        }
         
     }
-    
-}
 
 struct ModelData : Identifiable{
     public let id: Int
