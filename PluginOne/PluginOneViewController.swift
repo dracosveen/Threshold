@@ -50,7 +50,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                              ModelData(id: 7, imageName: "soup"),
                              ModelData(id: 8, imageName: "shirt"),
                              ModelData(id: 9, imageName: "shirt2"),
-                             ModelData(id: 10, imageName: "beer")
+                             ModelData(id: 10, imageName: "remote")
         
     ]
     
@@ -278,64 +278,63 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
     }
     
-    func processImages(image: CVPixelBuffer)
-    {
-        
-        guard self.modelData.count > 0 else{
-            return
-        }
-        
-        var observation : VNFeaturePrintObservation? // local images
-        var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
-        
-        //        sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
-        sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
-        
-        var tempData = modelData
-        
-        tempData = modelData.enumerated().map { (i,m) in
-            var model = m
-            if let uiimage = UIImage(named: model.imageName){
-                observation = featureprintObservationForImage(image: uiimage)
-                
-                do {
-                    var distance = Float(0)
-                    if let sourceObservation = sourceObservation{
-                        try observation?.computeDistance(&distance, to: sourceObservation)
-                        model.distance = "\(distance)"
-                        var distanceValue = [distance]
-                        // Threshold value
-                        DispatchQueue.main.asyncAfter(deadline: .now()) {
-                            print(distance)
-                            print(model.imageName)
-                            self.showCaptureButton()
-                            let distanceTwo = String(format:"%.2f",(distance))
-                            self.captureButton.setTitle(distanceTwo, for: .normal)
-                            
-                            
-                            if distance < 18.5 {
+        func processImages(image: CVPixelBuffer)
+        {
+            
+            guard self.modelData.count > 0 else{
+                return
+            }
+            
+            var observation : VNFeaturePrintObservation? // local images
+            var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
+            
+            //        sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
+            sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
+            
+            var tempData = modelData
+            
+            tempData = modelData.enumerated().map { (i,m) in
+                var model = m
+                if let uiimage = UIImage(named: model.imageName){
+                    observation = featureprintObservationForImage(image: uiimage)
+                    
+                    do {
+                        var distance = Float(0)
+                        if let sourceObservation = sourceObservation{
+                            try observation?.computeDistance(&distance, to: sourceObservation)
+                            model.distance = "\(distance)"
+                            var distanceValue = [distance]
+                            // Threshold value
+                            DispatchQueue.main.asyncAfter(deadline: .now()) {
                                 print(distance)
                                 print(model.imageName)
-                                print ("match")
-                                sleep(1)
-                                self.hideCaptureButton()
-                                print("sleeping")
+                                self.showCaptureButton()
+                                let distanceTwo = String(format:"%.2f",(distance))
+                                self.captureButton.setTitle(distanceTwo, for: .normal)
+                                
+                                
+                                if distance < 18.5 {
+                                    print(distance)
+                                    print(model.imageName)
+                                    print ("match")
+                                    //sleep(1)
+                                    self.hideCaptureButton()
+                                    
+                                }
                                 
                             }
                             
                         }
-                        
+                    } catch {
+                        print("errror occurred..")
                     }
-                } catch {
-                    print("errror occurred..")
+                    
                 }
-                
+                return model
             }
-            return model
+            //ONLY needed if results will be returned in sorted order
+            //modelData = tempData.sorted(by: {Float($0.distance)! < Float($1.distance)!})
         }
-        //ONLY needed if results will be returned in sorted order
-        //modelData = tempData.sorted(by: {Float($0.distance)! < Float($1.distance)!})
-    }
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
@@ -401,7 +400,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     func showCaptureButton() {
         DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 2) {
                 self.view.alpha = 1
                 self.noLabel.isHidden = true
                 self.captureButton.alpha = 1
