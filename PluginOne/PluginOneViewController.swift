@@ -33,26 +33,46 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var framesSeen = UserDefaults.standard.integer(forKey: "framesSeen")
     var imageSequenceNumber = 0
     var effect:UIVisualEffect!
+    var newImage = [UIImage]()
    
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
    // let semaphore = DispatchSemaphore(value: PluginOneViewController.maxInflightBuffers)
-    lazy  var storedImage = UserDefaults.standard.data(forKey: "key\(imageSequenceNumber)")
+    lazy var storedImage = UserDefaults.standard.data(forKey: "key\(imageSequenceNumber)")
     
     
     var modelData = [
-                             ModelData(id: 0, imageName: "neon"),
-                             ModelData(id: 1, imageName: "view"),
-                             ModelData(id: 2, imageName: "dog"),
-                             ModelData(id: 3, imageName: "notes"),
-                             ModelData(id: 4, imageName: "martin"),
-                             ModelData(id: 5, imageName: "purify"),
-                             ModelData(id: 6, imageName: "purify2"),
-                             ModelData(id: 7, imageName: "soup"),
-                             ModelData(id: 8, imageName: "shirt"),
-                             ModelData(id: 9, imageName: "shirt2"),
-                             ModelData(id: 10, imageName: "remote")
+         ModelData(id: 0, imageName: "neon"),
+         ModelData(id: 1, imageName: "view"),
+         ModelData(id: 2, imageName: "dog"),
+         ModelData(id: 3, imageName: "notes"),
+         ModelData(id: 4, imageName: "martin"),
+         ModelData(id: 5, imageName: "purify"),
+         ModelData(id: 6, imageName: "purify2"),
+         ModelData(id: 7, imageName: "soup"),
+         ModelData(id: 8, imageName: "shirt"),
+         ModelData(id: 9, imageName: "shirt2"),
+         ModelData(id: 10, imageName: "remote")
+    ]
+    
+    func imageToModel2() -> UIImage? {
+        let imageName = "copy" // your image name here
+        let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
+        let imageUrl: URL = URL(fileURLWithPath: imagePath)
+
+     guard FileManager.default.fileExists(atPath: imagePath),
+           let imageData: Data = try? Data(contentsOf: imageUrl),
+        let image: UIImage = UIImage(data: imageData) else {
+             return nil// No image found!
+        }
+        return image
+    }
+    
+    var modelData2 = [
+        ModelData2(id: 0, fileType:"")
         
     ]
+
+    
     
     // Popup the runs the first time
     //let firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
@@ -81,6 +101,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupInputOutput()
         setupPreviewLayer()
         view.addSubview(noLabel)
+        //modelData.append
         
         // First run
         /*
@@ -296,18 +317,19 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             tempData = modelData.enumerated().map { (i,m) in
                 var model = m
                 if let uiimage = UIImage(named: model.imageName){
-                    observation = featureprintObservationForImage(image: uiimage)
+                    observation = featureprintObservationForImage(image: imageToModel2()!)
+                    print(observation)
                     
                     do {
                         var distance = Float(0)
                         if let sourceObservation = sourceObservation{
                             try observation?.computeDistance(&distance, to: sourceObservation)
                             model.distance = "\(distance)"
-                            var distanceValue = [distance]
+                            
                             // Threshold value
                             DispatchQueue.main.asyncAfter(deadline: .now()) {
-                                print(distance)
-                                print(model.imageName)
+                                //print(distance)
+                                //print(model.imageName)
                                 self.showCaptureButton()
                                 let distanceTwo = String(format:"%.2f",(distance))
                                 self.captureButton.setTitle(distanceTwo, for: .normal)
@@ -315,7 +337,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                                 
                                 if distance < 18.5 {
                                     print(distance)
-                                    print(model.imageName)
+                                    //print(model.imageName)
                                     print ("match")
                                     //sleep(1)
                                     self.hideCaptureButton()
@@ -357,17 +379,28 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
     }
     
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
+    
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let imageData = photo.fileDataRepresentation() {
+            guard let capturedImage = UIImage.init(data: imageData , scale: 1.0) else {
+                   print("Fail to convert image data to UIImage")
+                   return
+               }
+            newImage.append(capturedImage)
+            print(newImage)
+
             
-            let newImage = UIImage(data: imageData)?.fixedOrientation() // It is the image
-            let theImageData:NSData = newImage!.jpegData(compressionQuality: 8)! as NSData
             let imageKey = "key\(imageSequenceNumber)"
             
-            UserDefaults.standard.set(theImageData, forKey: imageKey)
+            UserDefaults.standard.set(imageData, forKey: imageKey)
             performSegue(withIdentifier: "forwardPluginOneToImageViewController", sender: self)
-            print(imageKey)
+           // print(imageKey)
             
         }
     }
@@ -425,4 +458,10 @@ struct ModelData : Identifiable{
     public var distance : String = "NA"
 }
 
+struct ModelData2: Identifiable {
+    public var id: Int
+    public var fileType: String
+    public var distance : String = "NA"
+    
+}
 

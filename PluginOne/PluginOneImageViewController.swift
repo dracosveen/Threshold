@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class PluginOneImageViewController: UIViewController {
     
@@ -21,6 +22,7 @@ class PluginOneImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         showImage()
+       // storePhotosPath()
         
         // Do any additional setup after loading the view.
     }
@@ -38,6 +40,13 @@ class PluginOneImageViewController: UIViewController {
         
     }
     
+
+    func getDocumentsDirectory() -> URL {
+          let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+          return paths[0]
+      }
+
+    
     @IBAction func backButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
         UserDefaults.standard.removeObject(forKey: "key\(imageSequenceNumber)")
@@ -46,6 +55,13 @@ class PluginOneImageViewController: UIViewController {
     @IBAction func saveButton(_ sender: Any) {
         UIImageWriteToSavedPhotosAlbum(imageView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
         
+        let imageName = "copy" // your image name here
+        let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
+        let imageUrl: URL = URL(fileURLWithPath: imagePath)
+        
+        let newImage: UIImage = imageView.image!
+        try? newImage.pngData()?.write(to: imageUrl)
+        print(imagePath)
     }
     
     
@@ -68,7 +84,25 @@ class PluginOneImageViewController: UIViewController {
         }
         
     }
-    
+    /*
+    func storePhotosPath() {
+        
+        let fetchOptions: PHFetchOptions = PHFetchOptions()
+        
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        let fetchResult = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
+        
+        if (fetchResult.firstObject != nil) {
+            let lastAsset: PHAsset = fetchResult.lastObject!
+            PHImageManager.default().requestImage(for: lastAsset, targetSize: self.imageView.bounds.size, contentMode: PHImageContentMode.aspectFill, options: PHImageRequestOptions(), resultHandler: { (result, info) -> Void in
+                self.imageView.image = result
+                print(lastAsset)
+            })
+        }
+        
+        
+    }
+ */
 }
 
 

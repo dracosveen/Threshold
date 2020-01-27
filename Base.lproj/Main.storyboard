@@ -147,7 +147,7 @@
             <objects>
                 <viewController id="huP-yO-AEN" customClass="PluginOneImageViewController" customModule="Threshold" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ac-56-fSa">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="YyD-nm-RTI">
                                 <rect key="frame" x="0.0" y="0.0" width="424" height="896"/>
