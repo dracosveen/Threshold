@@ -388,13 +388,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
 
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let imageData = photo.fileDataRepresentation() {
-            guard let capturedImage = UIImage.init(data: imageData , scale: 1.0) else {
-                   print("Fail to convert image data to UIImage")
-                   return
-               }
-            newImage.append(capturedImage)
-            print(newImage)
-
             
             let imageKey = "key\(imageSequenceNumber)"
             

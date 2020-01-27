@@ -22,29 +22,17 @@ class PluginOneImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         showImage()
-       // storePhotosPath()
         
         // Do any additional setup after loading the view.
     }
     
     private func showImage() {
-        //imageView.frame = self.view.bounds
-        
-        //imageView.translatesAutoresizingMaskIntoConstraints = true
-        
-        //imageView.autoresizingMask = [UIView.AutoresizingMask.flexibleLeftMargin, UIView.AutoresizingMask.flexibleRightMargin, UIView.AutoresizingMask.flexibleTopMargin, UIView.AutoresizingMask.flexibleBottomMargin]
         
         let inputImage = UserDefaults.standard.data(forKey: "key\(imageSequenceNumber)")
         imageView.image = UIImage(data: inputImage!)
         print(UserDefaults.standard.integer(forKey: "key\(imageSequenceNumber)"))
         
     }
-    
-
-    func getDocumentsDirectory() -> URL {
-          let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-          return paths[0]
-      }
 
     
     @IBAction func backButton(_ sender: Any) {
@@ -84,25 +72,6 @@ class PluginOneImageViewController: UIViewController {
         }
         
     }
-    /*
-    func storePhotosPath() {
-        
-        let fetchOptions: PHFetchOptions = PHFetchOptions()
-        
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        let fetchResult = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: fetchOptions)
-        
-        if (fetchResult.firstObject != nil) {
-            let lastAsset: PHAsset = fetchResult.lastObject!
-            PHImageManager.default().requestImage(for: lastAsset, targetSize: self.imageView.bounds.size, contentMode: PHImageContentMode.aspectFill, options: PHImageRequestOptions(), resultHandler: { (result, info) -> Void in
-                self.imageView.image = result
-                print(lastAsset)
-            })
-        }
-        
-        
-    }
- */
 }
 
 
