@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import RealmSwift
 
 class PluginOneImageViewController: UIViewController {
     
@@ -16,12 +17,14 @@ class PluginOneImageViewController: UIViewController {
     
     @IBOutlet weak var SaveButton: UIButton!
     @IBOutlet weak var BackButton: UIButton!
+    var storedImage = StoredImage()
     
     var imageSequenceNumber = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         showImage()
+        //addNewImage()
         
         // Do any additional setup after loading the view.
     }
@@ -33,7 +36,23 @@ class PluginOneImageViewController: UIViewController {
         print(UserDefaults.standard.integer(forKey: "key\(imageSequenceNumber)"))
         
     }
-
+    /*
+    func addNewImage() {
+      let realm = try! Realm() // 1
+        
+      try! realm.write { // 2
+        let uuid = UUID().uuidString
+        let addedImage = StoredImage() // 3
+          
+        addedImage.name = uuid
+     
+          
+        realm.add(addedImage) // 5
+        storedImage = addedImage // 6
+        print ("this is addedImage", (addedImage))
+      }
+    }
+*/
     
     @IBAction func backButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -43,12 +62,26 @@ class PluginOneImageViewController: UIViewController {
     @IBAction func saveButton(_ sender: Any) {
         UIImageWriteToSavedPhotosAlbum(imageView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
         
-        let imageName = "copy" // your image name here
+        let uuid = UUID().uuidString
+        let imageName = uuid // your image name here
         let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
         let imageUrl: URL = URL(fileURLWithPath: imagePath)
         
         let newImage: UIImage = imageView.image!
         try? newImage.pngData()?.write(to: imageUrl)
+        
+        let realm = try! Realm()
+        try! realm.write {
+            
+            let newImageURL: Data = try Data(contentsOf: imageUrl)
+            let addedFilePath = StoredImage()
+            addedFilePath.name = uuid
+            addedFilePath.filepath = newImageURL
+            realm.add(addedFilePath)
+
+        }
+        
+        
         print(imagePath)
     }
     

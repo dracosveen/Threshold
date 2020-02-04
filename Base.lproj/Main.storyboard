@@ -150,8 +150,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="YyD-nm-RTI">
-                                <rect key="frame" x="0.0" y="0.0" width="424" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="frame" x="0.0" y="0.0" width="424" height="842"/>
+                                <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQH-bY-iiE">
                                 <rect key="frame" x="304" y="10" width="80" height="30"/>

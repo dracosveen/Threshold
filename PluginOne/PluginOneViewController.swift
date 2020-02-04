@@ -9,6 +9,7 @@
 import UIKit
 import Vision
 import AVFoundation
+import RealmSwift
 
 
 class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -33,11 +34,10 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var framesSeen = UserDefaults.standard.integer(forKey: "framesSeen")
     var imageSequenceNumber = 0
     var effect:UIVisualEffect!
-    var newImage = [UIImage]()
+    var storedImage = StoredImage()
    
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
    // let semaphore = DispatchSemaphore(value: PluginOneViewController.maxInflightBuffers)
-    lazy var storedImage = UserDefaults.standard.data(forKey: "key\(imageSequenceNumber)")
     
     
     var modelData = [
@@ -53,11 +53,13 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
          ModelData(id: 9, imageName: "shirt2"),
          ModelData(id: 10, imageName: "remote")
     ]
-    
+    /* MARK: To retreive IMAGE FROM IMAGE LIBRARY
     func imageToModel2() -> UIImage? {
+        
         let imageName = "copy" // your image name here
         let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
         let imageUrl: URL = URL(fileURLWithPath: imagePath)
+        print(imagePath)
 
      guard FileManager.default.fileExists(atPath: imagePath),
            let imageData: Data = try? Data(contentsOf: imageUrl),
@@ -66,13 +68,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
         return image
     }
-    
-    var modelData2 = [
-        ModelData2(id: 0, fileType:"")
-        
-    ]
-
-    
+ */
     
     // Popup the runs the first time
     //let firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
@@ -88,6 +84,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         let dataOutput = AVCaptureVideoDataOutput()
         dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
         captureSession.addOutput(dataOutput)
+        //print(Realm.Configuration.defaultConfiguration.fileURL!)
         
         // Popup Window
         effect = visualEffectView.effect
@@ -101,6 +98,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupInputOutput()
         setupPreviewLayer()
         view.addSubview(noLabel)
+        let arr: [Any] = [storedImage.filepath]
+        print ("THIS IS THE ARRAY: \(arr)")
         //modelData.append
         
         // First run
@@ -113,6 +112,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         */
         
     }
+    
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -299,8 +299,13 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
     }
     
+    
+    
+
         func processImages(image: CVPixelBuffer)
+            
         {
+            
             
             guard self.modelData.count > 0 else{
                 return
@@ -312,34 +317,36 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             //        sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
             sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
             
-            var tempData = modelData
+           
+            let realm = try! Realm()
+            let array = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
             
-            tempData = modelData.enumerated().map { (i,m) in
-                var model = m
-                if let uiimage = UIImage(named: model.imageName){
-                    observation = featureprintObservationForImage(image: imageToModel2()!)
-                    print(observation)
+            var tempData = array
+            
+                       tempData = array.enumerated().map { (i,m) in
+                        let storedImage = m
+                        if let uiimage = UIImage(data: storedImage.filepath){
+                            observation = featureprintObservationForImage(image: uiimage)
+                               //print(observation)
                     
                     do {
                         var distance = Float(0)
                         if let sourceObservation = sourceObservation{
                             try observation?.computeDistance(&distance, to: sourceObservation)
-                            model.distance = "\(distance)"
+                            //model.distance = "\(distance)"
                             
                             // Threshold value
                             DispatchQueue.main.asyncAfter(deadline: .now()) {
                                 //print(distance)
-                                //print(model.imageName)
                                 self.showCaptureButton()
                                 let distanceTwo = String(format:"%.2f",(distance))
                                 self.captureButton.setTitle(distanceTwo, for: .normal)
                                 
                                 
-                                if distance < 18.5 {
+                                if distance < 15 {
                                     print(distance)
-                                    //print(model.imageName)
+                                    //print(storedImage.filepath)
                                     print ("match")
-                                    //sleep(1)
                                     self.hideCaptureButton()
                                     
                                 }
@@ -352,7 +359,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                     }
                     
                 }
-                return model
+                return storedImage
             }
             //ONLY needed if results will be returned in sorted order
             //modelData = tempData.sorted(by: {Float($0.distance)! < Float($1.distance)!})
@@ -451,10 +458,9 @@ struct ModelData : Identifiable{
     public var distance : String = "NA"
 }
 
-struct ModelData2: Identifiable {
-    public var id: Int
-    public var fileType: String
-    public var distance : String = "NA"
-    
+extension Results {
+    func toArray<T>(ofType: T.Type) -> [T] {
+        let array = Array(self) as! [T]
+        return array
+    }
 }
-
