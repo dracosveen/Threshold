@@ -24,7 +24,6 @@ class PluginOneImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         showImage()
-        //addNewImage()
         
         // Do any additional setup after loading the view.
     }
@@ -33,26 +32,8 @@ class PluginOneImageViewController: UIViewController {
         
         let inputImage = UserDefaults.standard.data(forKey: "key\(imageSequenceNumber)")
         imageView.image = UIImage(data: inputImage!)
-        print(UserDefaults.standard.integer(forKey: "key\(imageSequenceNumber)"))
         
     }
-    /*
-    func addNewImage() {
-      let realm = try! Realm() // 1
-        
-      try! realm.write { // 2
-        let uuid = UUID().uuidString
-        let addedImage = StoredImage() // 3
-          
-        addedImage.name = uuid
-     
-          
-        realm.add(addedImage) // 5
-        storedImage = addedImage // 6
-        print ("this is addedImage", (addedImage))
-      }
-    }
-*/
     
     @IBAction func backButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -75,7 +56,6 @@ class PluginOneImageViewController: UIViewController {
             
             let newImageURL: Data = try Data(contentsOf: imageUrl)
             let addedFilePath = StoredImage()
-            addedFilePath.name = uuid
             addedFilePath.filepath = newImageURL
             realm.add(addedFilePath)
 

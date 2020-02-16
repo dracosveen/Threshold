@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -95,18 +95,28 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gSm-oo-isp">
-                            <rect key="frame" x="151" y="433" width="38" height="30"/>
+                            <rect key="frame" x="139" y="433" width="60" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                             <state key="normal" title="Got it"/>
                             <connections>
                                 <action selector="dismissButtonPopupView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ciw-YA-zuR"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3K9-OO-g41">
-                            <rect key="frame" x="31" y="13" width="279" height="412"/>
+                            <rect key="frame" x="22" y="13" width="294" height="333"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <string key="text">For Carlotta &amp; Wotienke/IDFA  The current version allows you to capture images of everything except the “The Night Watch” sculpture at Rembrandtplein.   For Demo purposes the “Tolerance” level is set to low which prevents capturing of images that are too similar to the most popular images (of the sculptures) on Instagram.   Created by Martin Adolfsson/InsaneLittleProjects.com</string>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                            <string key="text">***** Threshold V 0.2 *****   Threshold is an augmented camera app that helps creates awareness of what surrounds you.    
+If you can only capture an object once - how do you capture it?
+</string>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="16"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Created by Martin Adolfsson InsaneLittleProjects.com" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XdU-6g-Fat">
+                            <rect key="frame" x="0.0" y="347" width="338" height="59"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -146,42 +156,58 @@
         <scene sceneID="9Py-XX-W4y">
             <objects>
                 <viewController id="huP-yO-AEN" customClass="PluginOneImageViewController" customModule="Threshold" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ac-56-fSa">
+                    <view key="view" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="0Ac-56-fSa">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="YyD-nm-RTI">
-                                <rect key="frame" x="0.0" y="0.0" width="424" height="842"/>
-                                <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YyD-nm-RTI">
+                                <rect key="frame" x="0.0" y="0.0" width="424" height="896"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQH-bY-iiE">
-                                <rect key="frame" x="304" y="10" width="80" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="bgV-t4-91J"/>
-                                    <constraint firstAttribute="width" constant="80" id="hmI-BD-1tb"/>
-                                </constraints>
-                                <state key="normal" title="Save"/>
-                                <connections>
-                                    <action selector="saveButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="46m-Jg-85W"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ky-Mw-F8z">
-                                <rect key="frame" x="30" y="10" width="80" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="ApT-cU-hqT"/>
-                                    <constraint firstAttribute="height" constant="30" id="Fca-w8-zhF"/>
-                                </constraints>
-                                <state key="normal" title="Back"/>
-                                <connections>
-                                    <action selector="backButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="GLT-xW-6vs"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="sfm-OW-jJr">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="184"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-A0-pg9">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="184"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ky-Mw-F8z">
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="184"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="fAv-sh-XkS"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                                <state key="normal" title="Back">
+                                                    <color key="titleColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="backButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="GLT-xW-6vs"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQH-bY-iiE">
+                                                <rect key="frame" x="314" y="0.0" width="100" height="184"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="0U1-Wp-swe"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                                <state key="normal" title="Save"/>
+                                                <connections>
+                                                    <action selector="saveButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="46m-Jg-85W"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="YQH-bY-iiE" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" constant="10" id="RXK-Tl-tC5"/>
-                            <constraint firstAttribute="trailing" secondItem="YQH-bY-iiE" secondAttribute="trailing" constant="30" id="b04-4f-jGl"/>
-                            <constraint firstItem="4ky-Mw-F8z" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" constant="10" id="k4j-MJ-I8N"/>
-                            <constraint firstItem="4ky-Mw-F8z" firstAttribute="leading" secondItem="13j-6O-P79" secondAttribute="leading" constant="30" id="y5l-2b-aw0"/>
+                            <constraint firstItem="sfm-OW-jJr" firstAttribute="leading" secondItem="13j-6O-P79" secondAttribute="leading" id="d4W-HJ-s2g"/>
+                            <constraint firstItem="YyD-nm-RTI" firstAttribute="height" secondItem="0Ac-56-fSa" secondAttribute="height" id="hRU-gv-NiO"/>
+                            <constraint firstItem="YyD-nm-RTI" firstAttribute="width" secondItem="0Ac-56-fSa" secondAttribute="width" multiplier="1.02415" id="kL2-oz-dPE"/>
+                            <constraint firstItem="sfm-OW-jJr" firstAttribute="centerX" secondItem="0Ac-56-fSa" secondAttribute="centerX" id="lG4-d1-4pT"/>
+                            <constraint firstItem="13j-6O-P79" firstAttribute="bottom" secondItem="sfm-OW-jJr" secondAttribute="bottom" constant="712" id="xqI-KW-93d"/>
+                            <constraint firstItem="sfm-OW-jJr" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" id="zoY-Z6-QgU"/>
+                            <constraint firstItem="sfm-OW-jJr" firstAttribute="width" secondItem="0Ac-56-fSa" secondAttribute="width" id="zqg-AQ-Qit"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="13j-6O-P79"/>
                     </view>

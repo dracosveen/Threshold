@@ -39,20 +39,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
    // let semaphore = DispatchSemaphore(value: PluginOneViewController.maxInflightBuffers)
     
-    
-    var modelData = [
-         ModelData(id: 0, imageName: "neon"),
-         ModelData(id: 1, imageName: "view"),
-         ModelData(id: 2, imageName: "dog"),
-         ModelData(id: 3, imageName: "notes"),
-         ModelData(id: 4, imageName: "martin"),
-         ModelData(id: 5, imageName: "purify"),
-         ModelData(id: 6, imageName: "purify2"),
-         ModelData(id: 7, imageName: "soup"),
-         ModelData(id: 8, imageName: "shirt"),
-         ModelData(id: 9, imageName: "shirt2"),
-         ModelData(id: 10, imageName: "remote")
-    ]
+
     /* MARK: To retreive IMAGE FROM IMAGE LIBRARY
     func imageToModel2() -> UIImage? {
         
@@ -71,7 +58,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
  */
     
     // Popup the runs the first time
-    //let firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
+    var firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
     
     // ViewDidLoad
     override func viewDidLoad() {
@@ -84,7 +71,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         let dataOutput = AVCaptureVideoDataOutput()
         dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
         captureSession.addOutput(dataOutput)
-        //print(Realm.Configuration.defaultConfiguration.fileURL!)
         
         // Popup Window
         effect = visualEffectView.effect
@@ -98,18 +84,15 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         setupInputOutput()
         setupPreviewLayer()
         view.addSubview(noLabel)
-        let arr: [Any] = [storedImage.filepath]
-        print ("THIS IS THE ARRAY: \(arr)")
-        //modelData.append
         
         // First run
-        /*
+
         if firstRun {
-            animateIn()
+            firstRun = false
         } else {
-            runFirst() //will only run once
+           animateIn()
+            runFirst()  //will only run once
         }
-        */
         
     }
     
@@ -165,7 +148,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         super.viewWillDisappear(animated)
         captureSession.stopRunning()
     }
-    /*
+
     func animateIn() {
         self.view.addSubview(addItemView)
         addItemView.center = self.view.center
@@ -180,7 +163,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
         
     }
-    */
+
     
     func animateOut () {
         UIView.animate(withDuration: 0.3, animations: {
@@ -240,7 +223,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             let captureDeviceInput = try AVCaptureDeviceInput(device: currentCamera!)
             captureSession.addInput(captureDeviceInput)
             photoOutput = AVCapturePhotoOutput()
-            photoOutput?.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])], completionHandler: nil)
+            photoOutput?.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.h264])], completionHandler: nil)
             captureSession.addOutput(photoOutput!)
             photoOutput?.connections[0].videoOrientation = AVCaptureVideoOrientation.portrait
         } catch {
@@ -306,15 +289,10 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             
         {
             
-            
-            guard self.modelData.count > 0 else{
-                return
-            }
-            
             var observation : VNFeaturePrintObservation? // local images
             var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
             
-            //        sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
+            // sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
             sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
             
            
@@ -343,7 +321,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                                 self.captureButton.setTitle(distanceTwo, for: .normal)
                                 
                                 
-                                if distance < 15 {
+                                if distance < 12 {
                                     print(distance)
                                     //print(storedImage.filepath)
                                     print ("match")
@@ -386,10 +364,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
     }
     
-    func getDocumentsDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
-    }
     
     
 
@@ -452,11 +426,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
     }
 
-struct ModelData : Identifiable{
-    public let id: Int
-    public var imageName : String
-    public var distance : String = "NA"
-}
+
 
 extension Results {
     func toArray<T>(ofType: T.Type) -> [T] {
