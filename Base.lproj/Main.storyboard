@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -85,7 +86,7 @@
                         <outlet property="captureButton" destination="IAI-zf-x8F" id="NtI-LG-LMP"/>
                         <outlet property="noLabel" destination="LbS-Y8-c6Z" id="5e3-vN-6Oa"/>
                         <outlet property="visualEffectView" destination="riA-By-Vyg" id="o22-3F-bfv"/>
-                        <segue destination="huP-yO-AEN" kind="show" identifier="forwardPluginOneToImageViewController" id="Rdb-UE-sUf"/>
+                        <segue destination="huP-yO-AEN" kind="presentation" identifier="forwardPluginOneToImageViewController" modalPresentationStyle="fullScreen" id="Rdb-UE-sUf"/>
                         <segue destination="2Q3-Ei-g28" kind="show" identifier="SegueFromPluginOneViewControllerToPluginTwoViewController" id="dFQ-UK-5lR"/>
                     </connections>
                 </viewController>
@@ -127,73 +128,70 @@ If you can only capture an object once - how do you capture it?
             </objects>
             <point key="canvasLocation" x="63.768115942028992" y="18.75"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="JX2-6r-Vx6">
-            <objects>
-                <viewController id="MdH-6N-CyG" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="hqh-fL-yrP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="g17-FO-Q6s">
-                                <rect key="frame" x="87" y="241" width="240" height="317"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="Guy-I2-AlI"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cCJ-NQ-w8I" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="89.855072463768124" y="720.53571428571422"/>
-        </scene>
         <!--Plugin One Image View Controller-->
         <scene sceneID="9Py-XX-W4y">
             <objects>
                 <viewController id="huP-yO-AEN" customClass="PluginOneImageViewController" customModule="Threshold" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="0Ac-56-fSa">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YyD-nm-RTI">
-                                <rect key="frame" x="0.0" y="0.0" width="424" height="896"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YyD-nm-RTI">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="sfm-OW-jJr">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="184"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="106"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-A0-pg9">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="184"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-A0-pg9">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="106"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ky-Mw-F8z">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="184"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wj-uR-PMh">
+                                                <rect key="frame" x="0.0" y="0.0" width="132.5" height="106"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ky-Mw-F8z">
+                                                        <rect key="frame" x="18" y="28" width="76.5" height="50"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                                        <state key="normal" title="Back">
+                                                            <color key="titleColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="backButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="GLT-xW-6vs"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="fAv-sh-XkS"/>
+                                                    <constraint firstItem="4ky-Mw-F8z" firstAttribute="leading" secondItem="3wj-uR-PMh" secondAttribute="leadingMargin" constant="10" id="BS1-wD-MJo"/>
+                                                    <constraint firstItem="4ky-Mw-F8z" firstAttribute="top" secondItem="3wj-uR-PMh" secondAttribute="topMargin" constant="20" id="CDm-hG-IGF"/>
+                                                    <constraint firstAttribute="trailingMargin" secondItem="4ky-Mw-F8z" secondAttribute="trailing" constant="30" id="CkL-jJ-wWr"/>
+                                                    <constraint firstAttribute="bottomMargin" secondItem="4ky-Mw-F8z" secondAttribute="bottom" constant="20" id="OKd-Kj-9x3"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
-                                                <state key="normal" title="Back">
-                                                    <color key="titleColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="backButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="GLT-xW-6vs"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQH-bY-iiE">
-                                                <rect key="frame" x="314" y="0.0" width="100" height="184"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QAJ-2D-Kie">
+                                                <rect key="frame" x="140.5" y="0.0" width="133" height="106"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qfd-fy-5op">
+                                                <rect key="frame" x="281.5" y="0.0" width="132.5" height="106"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQH-bY-iiE">
+                                                        <rect key="frame" x="38" y="18" width="76.5" height="70"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                                        <state key="normal" title="Save"/>
+                                                        <connections>
+                                                            <action selector="saveButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="46m-Jg-85W"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="0U1-Wp-swe"/>
+                                                    <constraint firstAttribute="bottomMargin" secondItem="YQH-bY-iiE" secondAttribute="bottom" constant="10" id="5r0-Tb-R4J"/>
+                                                    <constraint firstAttribute="trailingMargin" secondItem="YQH-bY-iiE" secondAttribute="trailing" constant="10" id="Eif-jK-kgQ"/>
+                                                    <constraint firstItem="YQH-bY-iiE" firstAttribute="leading" secondItem="Qfd-fy-5op" secondAttribute="leadingMargin" constant="30" id="vUS-Oi-dTa"/>
+                                                    <constraint firstItem="YQH-bY-iiE" firstAttribute="top" secondItem="Qfd-fy-5op" secondAttribute="topMargin" constant="10" id="zHK-9w-iTZ"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
-                                                <state key="normal" title="Save"/>
-                                                <connections>
-                                                    <action selector="saveButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="46m-Jg-85W"/>
-                                                </connections>
-                                            </button>
+                                            </view>
                                         </subviews>
                                     </stackView>
                                 </subviews>
@@ -202,10 +200,12 @@ If you can only capture an object once - how do you capture it?
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="sfm-OW-jJr" firstAttribute="leading" secondItem="13j-6O-P79" secondAttribute="leading" id="d4W-HJ-s2g"/>
-                            <constraint firstItem="YyD-nm-RTI" firstAttribute="height" secondItem="0Ac-56-fSa" secondAttribute="height" id="hRU-gv-NiO"/>
-                            <constraint firstItem="YyD-nm-RTI" firstAttribute="width" secondItem="0Ac-56-fSa" secondAttribute="width" multiplier="1.02415" id="kL2-oz-dPE"/>
                             <constraint firstItem="sfm-OW-jJr" firstAttribute="centerX" secondItem="0Ac-56-fSa" secondAttribute="centerX" id="lG4-d1-4pT"/>
+                            <constraint firstItem="YyD-nm-RTI" firstAttribute="trailing" secondItem="13j-6O-P79" secondAttribute="trailing" id="npa-1a-ztg"/>
+                            <constraint firstItem="13j-6O-P79" firstAttribute="bottom" secondItem="YyD-nm-RTI" secondAttribute="bottom" constant="-34" id="qai-mY-YQu"/>
+                            <constraint firstItem="YyD-nm-RTI" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" constant="-44" id="uFv-BS-NQD"/>
                             <constraint firstItem="13j-6O-P79" firstAttribute="bottom" secondItem="sfm-OW-jJr" secondAttribute="bottom" constant="712" id="xqI-KW-93d"/>
+                            <constraint firstItem="YyD-nm-RTI" firstAttribute="leading" secondItem="13j-6O-P79" secondAttribute="leading" id="zJS-Jj-EUS"/>
                             <constraint firstItem="sfm-OW-jJr" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" id="zoY-Z6-QgU"/>
                             <constraint firstItem="sfm-OW-jJr" firstAttribute="width" secondItem="0Ac-56-fSa" secondAttribute="width" id="zqg-AQ-Qit"/>
                         </constraints>

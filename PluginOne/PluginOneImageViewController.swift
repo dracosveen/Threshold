@@ -18,6 +18,7 @@ class PluginOneImageViewController: UIViewController {
     @IBOutlet weak var SaveButton: UIButton!
     @IBOutlet weak var BackButton: UIButton!
     var storedImage = StoredImage()
+    var onDismiss: (() -> Void)?
     
     var imageSequenceNumber = 0
     
@@ -36,8 +37,10 @@ class PluginOneImageViewController: UIViewController {
     }
     
     @IBAction func backButton(_ sender: Any) {
+        onDismiss?()
         dismiss(animated: true, completion: nil)
         UserDefaults.standard.removeObject(forKey: "key\(imageSequenceNumber)")
+        
     }
     
     @IBAction func saveButton(_ sender: Any) {

@@ -64,9 +64,9 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Swipe right edge on screen
-        screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
-        screenRightEdgeRecognizer.edges = .right
-        view.addGestureRecognizer(screenRightEdgeRecognizer)
+        //screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
+        //screenRightEdgeRecognizer.edges = .right
+        //view.addGestureRecognizer(screenRightEdgeRecognizer)
         
         let dataOutput = AVCaptureVideoDataOutput()
         dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
@@ -108,6 +108,14 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         UserDefaults.standard.set(true, forKey: "firstRun")
     }
     
+    func setupForViewControllerB() {
+        let vc = PluginOneImageViewController()
+        vc.onDismiss = {
+            self.view.alpha = 0
+            print("here")
+        }
+    }
+    
    private func captureButtonLayout() {
     
         // Size the button in preportion to the view
@@ -146,7 +154,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        captureSession.stopRunning()
+        self.view.alpha = 1
     }
 
     func animateIn() {
@@ -286,62 +294,62 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
 
         func processImages(image: CVPixelBuffer)
-            
-        {
-            
-            var observation : VNFeaturePrintObservation? // local images
-            var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
-            
-            // sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
-            sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
-            
-           
-            let realm = try! Realm()
-            let array = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
-            
-            var tempData = array
-            
-                       tempData = array.enumerated().map { (i,m) in
-                        let storedImage = m
-                        if let uiimage = UIImage(data: storedImage.filepath){
-                            observation = featureprintObservationForImage(image: uiimage)
-                               //print(observation)
-                    
-                    do {
-                        var distance = Float(0)
-                        if let sourceObservation = sourceObservation{
-                            try observation?.computeDistance(&distance, to: sourceObservation)
-                            //model.distance = "\(distance)"
+        
+    {
+        
+        var observation : VNFeaturePrintObservation? // local images
+        var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
+        
+        // sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
+        sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
+        
+        
+        let realm = try! Realm()
+        let array = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
+        
+        var tempData = array
+        
+        tempData = array.enumerated().map { (i,m) in
+            let storedImage = m
+            if let uiimage = UIImage(data: storedImage.filepath){
+                observation = featureprintObservationForImage(image: uiimage)
+                //print(observation)
+                
+                do {
+                    var distance = Float(0)
+                    if let sourceObservation = sourceObservation{
+                        try observation?.computeDistance(&distance, to: sourceObservation)
+                        //model.distance = "\(distance)"
+                        
+                        // Threshold value
+                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+                            //print(distance)
+                            self.showCaptureButton()
+                            let distanceTwo = String(format:"%.2f",(distance))
+                            self.captureButton.setTitle(distanceTwo, for: .normal)
                             
-                            // Threshold value
-                            DispatchQueue.main.asyncAfter(deadline: .now()) {
-                                //print(distance)
-                                self.showCaptureButton()
-                                let distanceTwo = String(format:"%.2f",(distance))
-                                self.captureButton.setTitle(distanceTwo, for: .normal)
-                                
-                                
-                                if distance < 12 {
-                                    print(distance)
-                                    //print(storedImage.filepath)
-                                    print ("match")
-                                    self.hideCaptureButton()
-                                    
-                                }
+                            
+                            if distance < 12 {
+                                print(distance)
+                                //print(storedImage.filepath)
+                                print ("match")
+                                self.hideCaptureButton()
                                 
                             }
                             
                         }
-                    } catch {
-                        print("errror occurred..")
+                        
                     }
-                    
+                } catch {
+                    print("errror occurred..")
                 }
-                return storedImage
+                
             }
-            //ONLY needed if results will be returned in sorted order
-            //modelData = tempData.sorted(by: {Float($0.distance)! < Float($1.distance)!})
+            return storedImage
         }
+        //ONLY needed if results will be returned in sorted order
+        //modelData = tempData.sorted(by: {Float($0.distance)! < Float($1.distance)!})
+}
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
@@ -356,6 +364,17 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
     }
     
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+          if let imageData = photo.fileDataRepresentation() {
+              
+              let imageKey = "key\(imageSequenceNumber)"
+              
+              UserDefaults.standard.set(imageData, forKey: imageKey)
+            performSegue(withIdentifier: "forwardPluginOneToImageViewController", sender: self)
+              
+          }
+      }
+    
     
     @IBAction func captureButton(_ sender: Any) {
         
@@ -364,20 +383,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
     }
     
-    
-    
 
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        if let imageData = photo.fileDataRepresentation() {
-            
-            let imageKey = "key\(imageSequenceNumber)"
-            
-            UserDefaults.standard.set(imageData, forKey: imageKey)
-            performSegue(withIdentifier: "forwardPluginOneToImageViewController", sender: self)
-           // print(imageKey)
-            
-        }
-    }
     
     //FeaturePrintObservation on CvPixelBuffer
         func featureprintObservationForCVPixelBuffer(image: CVPixelBuffer) -> VNFeaturePrintObservation? {
