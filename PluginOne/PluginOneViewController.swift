@@ -329,7 +329,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                             self.captureButton.setTitle(distanceTwo, for: .normal)
                             
                             
-                            if distance < 12 {
+                            if distance < 12.5 {
                                 print(distance)
                                 //print(storedImage.filepath)
                                 print ("match")
