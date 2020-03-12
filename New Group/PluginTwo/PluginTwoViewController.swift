@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import RealmSwift
+import Vision
 
 class PluginTwoViewController: UIViewController {
 
     
     @IBOutlet weak var StayTunedLabel: UILabel!
+     var storedImage = StoredImage()
     
     var screenLeftEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
     
@@ -27,7 +30,13 @@ class PluginTwoViewController: UIViewController {
         StayTunedLabel.textAlignment = .center
         StayTunedLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         StayTunedLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-    
+        
+        let dateDetails: String = storedImage.created.description
+        let dateInt: Int = storedImage.created.hashValue
+        self.StayTunedLabel.text = dateDetails
+        self.StayTunedLabel.text = "\(dateInt)"
+        
+        
     }
     
     
@@ -38,6 +47,34 @@ class PluginTwoViewController: UIViewController {
             dismiss(animated: true, completion: nil)
         }
     }
+//
+//    func featureprintObservationForImage(data:) -> VNFeaturePrintObservation? {
+//                let requestHandler = VNImageRequestHandler(cgImage: image.cgImage!, options: [:])
+//                let request = VNGenerateImageFeaturePrintRequest()
+//                do {
+//                    try requestHandler.perform([request])
+//                    return request.results?.first as? VNFeaturePrintObservation
+//                } catch {
+//                    print("Vision error: \(error)")
+//                    return nil
+//                }
+//            }
+    
+    
+//    func newFeatureExtraction() {
+//
+//        var requestHandler = VNImageRequestHandler(data: storedImage.filepath, options: [:])
+//        let request = VNClassifyImageRequest()
+//        do {
+//
+//            try requestHandler.perform([request])
+//
+//        }
+//
+//        if let uiimage = UIImage(data: storedImage.filepath){
+//            saliencyObservation = VNSaliencyImageObservation(coder: uiimage)
+//
+//    }
 
     /*
     // MARK: - Navigation

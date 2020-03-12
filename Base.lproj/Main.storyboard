@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -66,6 +67,10 @@
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="eDi-3r-SEN">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <gestureRecognizers/>
+                                    <connections>
+                                        <outletCollection property="gestureRecognizers" destination="32p-xr-hGU" appends="YES" id="pm1-T2-5Tm"/>
+                                    </connections>
                                 </view>
                                 <blurEffect style="light"/>
                             </visualEffectView>
@@ -88,6 +93,7 @@
                         <outlet property="visualEffectView" destination="riA-By-Vyg" id="o22-3F-bfv"/>
                         <segue destination="huP-yO-AEN" kind="presentation" identifier="forwardPluginOneToImageViewController" modalPresentationStyle="fullScreen" id="Rdb-UE-sUf"/>
                         <segue destination="2Q3-Ei-g28" kind="show" identifier="SegueFromPluginOneViewControllerToPluginTwoViewController" id="dFQ-UK-5lR"/>
+                        <segue destination="9e9-eI-QRy" kind="show" identifier="ShowDetailsSegue" id="3qs-7h-7Fy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -125,8 +131,65 @@ Threshold won't help you capture better images but different ones.   Use it 
                     <color key="backgroundColor" white="1" alpha="0.69606164383561642" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <viewLayoutGuide key="safeArea" id="6k2-fh-qVB"/>
                 </view>
+                <swipeGestureRecognizer direction="left" id="32p-xr-hGU">
+                    <connections>
+                        <segue destination="9e9-eI-QRy" kind="showDetail" id="vhO-px-Ilq"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="63.768115942028992" y="18.75"/>
+        </scene>
+        <!--Details View Controller-->
+        <scene sceneID="yzQ-If-dUt">
+            <objects>
+                <collectionViewController id="9e9-eI-QRy" customClass="DetailsViewController" customModule="Threshold" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="8hi-JO-rFL">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="OeQ-Kr-ig3">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DetailsCell" id="qIY-Zn-5O8" customClass="DetailsCell" customModule="Threshold" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Fd5-Xq-8gn">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XcZ-6v-GXW">
+                                            <rect key="frame" x="-4" y="-4" width="59" height="59"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rt-ye-mD2">
+                                            <rect key="frame" x="4" y="14" width="42" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </collectionViewCellContentView>
+                                <connections>
+                                    <outlet property="ImageView" destination="XcZ-6v-GXW" id="AFS-oe-BcJ"/>
+                                    <outlet property="label" destination="2rt-ye-mD2" id="XEc-oz-R2A"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="9e9-eI-QRy" id="bCz-Bs-7sa"/>
+                            <outlet property="delegate" destination="9e9-eI-QRy" id="qAM-wN-qgt"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="9ap-jk-XSW"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tns-pe-ed9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1253.6231884057972" y="-677.00892857142856"/>
         </scene>
         <!--Plugin One Image View Controller-->
         <scene sceneID="9Py-XX-W4y">
@@ -222,4 +285,7 @@ Threshold won't help you capture better images but different ones.   Use it 
             <point key="canvasLocation" x="785.50724637681162" y="18.75"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="3qs-7h-7Fy"/>
+    </inferredMetricsTieBreakers>
 </document>

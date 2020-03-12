@@ -35,6 +35,12 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var imageSequenceNumber = 0
     var effect:UIVisualEffect!
     var storedImage = StoredImage()
+    let showDetailsSegueID = "ShowDetailsSegue"
+    
+    var originalImageURL: URL?
+    var contestantImageURLs = [URL]()
+
+       var ranking = [(contestantIndex: Int, featureprintDistance: Float)]()
    
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
    // let semaphore = DispatchSemaphore(value: PluginOneViewController.maxInflightBuffers)
@@ -64,9 +70,9 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Swipe right edge on screen
-        //screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
-        //screenRightEdgeRecognizer.edges = .right
-        //view.addGestureRecognizer(screenRightEdgeRecognizer)
+//        screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
+//        screenRightEdgeRecognizer.edges = .right
+//        view.addGestureRecognizer(screenRightEdgeRecognizer)
         
         let dataOutput = AVCaptureVideoDataOutput()
         dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
@@ -285,24 +291,19 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
         if recognizer.state == .recognized {
             print("Right Edge")
-            captureSession.stopRunning()
             performSegue(withIdentifier: "SegueFromPluginOneViewControllerToPluginTwoViewController", sender: Any?.self)
         }
     }
     
     
-    
 
-        func processImages(image: CVPixelBuffer)
-        
-    {
+        func processImages(image: CVPixelBuffer){
         
         var observation : VNFeaturePrintObservation? // local images
         var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
         
         // sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
         sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
-        
         
         let realm = try! Realm()
         let array = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
@@ -349,6 +350,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
         //ONLY needed if results will be returned in sorted order
         //modelData = tempData.sorted(by: {Float($0.distance)! < Float($1.distance)!})
+
 }
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
@@ -429,6 +431,10 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
                 }
         }
+    
+
+    
+    
         
     }
 
