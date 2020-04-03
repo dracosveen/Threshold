@@ -8,11 +8,7 @@ ViewController to display the similarity graph of the contestant's images.
 import UIKit
 import RealmSwift
 
-     //var storedImage = StoredImage()
-    let realm = try! Realm()
-let array = realm.objects(StoredImage.self).last!
-
-
+/*
 // MARK: To retreive IMAGE FROM IMAGE LIBRARY
    func UIImageFromPath() -> UIImage? {
        
@@ -28,7 +24,7 @@ let array = realm.objects(StoredImage.self).last!
        }
        return image
    }
-
+*/
 
 
 class DetailsCell: UICollectionViewCell {
@@ -91,8 +87,7 @@ class DetailsBackgroundView: UICollectionReusableView {
 class DetailsViewController: UICollectionViewController {
         
     
-    //var nodes = [(url: URL?, label: String, distance: Float)]()
-    var nodes = [(data: array, label: String(), distance: Float())]
+    var nodes = [(url: URL?, label: String, distance: Float)]()
         var detailsLayout: DetailsLayout {
         guard let detailsLayout = collectionViewLayout as? DetailsLayout else {
             fatalError("Unexpected layout type.")
@@ -119,11 +114,14 @@ class DetailsViewController: UICollectionViewController {
         }
         
         let node = nodes[indexPath.item]
-        let nodeData = node.data
-        detailsCell.imageView.image = UIImage(data: nodeData.filepath)
+        if let url = node.url {
+            detailsCell.imageView.image = UIImage(contentsOfFile: url.path)
+        }
         detailsCell.label.text = node.label
-        print(nodeData)
+        //print(node)
+        
         return detailsCell
+
     }
     
     override func collectionView(_ collectionView: UICollectionView,

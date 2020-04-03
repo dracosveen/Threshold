@@ -59,7 +59,7 @@ class PluginOneImageViewController: UIViewController {
             
             let newImageURL: Data = try Data(contentsOf: imageUrl)
             let addedFilePath = StoredImage()
-            addedFilePath.filepath = newImageURL
+            addedFilePath.filepath = imagePath
             realm.add(addedFilePath)
 
         }

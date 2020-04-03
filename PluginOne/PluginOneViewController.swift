@@ -37,8 +37,10 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     var storedImage = StoredImage()
     let showDetailsSegueID = "ShowDetailsSegue"
     
-    var originalImageURL: URL?
-    var contestantImageURLs = [URL]()
+    
+//    var originalImageURL: URL?
+//    var contestantImageURLs = [URL]()
+
 
        var ranking = [(contestantIndex: Int, featureprintDistance: Float)]()
    
@@ -61,7 +63,8 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
         return image
     }
- */
+*/
+    
     
     // Popup the runs the first time
     var firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
@@ -99,6 +102,11 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
            animateIn()
             runFirst()  //will only run once
         }
+        
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            self.processImagesTwo()
+//        }
+        
         
     }
     
@@ -307,12 +315,12 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
         let realm = try! Realm()
         let array = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
-        
+            
         var tempData = array
         
         tempData = array.enumerated().map { (i,m) in
             let storedImage = m
-            if let uiimage = UIImage(data: storedImage.filepath){
+            if let uiimage = UIImage(contentsOfFile: storedImage.filepath){
                 observation = featureprintObservationForImage(image: uiimage)
                 //print(observation)
                 
@@ -352,6 +360,57 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         //modelData = tempData.sorted(by: {Float($0.distance)! < Float($1.distance)!})
 
 }
+    /*
+    func processImagesTwo() {
+        // LATEST IMAGE
+        let realm = try! Realm()
+                let array = realm.objects(StoredImage.self).last
+            let originalImageURL = UIImage(contentsOfFile: array!.filepath)
+                   //print("THIS IS URLTWO \(originalImageURL)")
+        
+          guard let originalURL = originalImageURL else {
+              return
+          }
+          // Make sure we can generate featureprint for original drawing.
+        guard let originalFPO = featureprintObservationForImage(image: originalURL) else {
+              return
+          }
+        print("THIS IS ORIGINALFPO \(originalFPO)")
+          // Generate featureprints for copies and compute distances from original featureprint.
+        
+        //STORED IMAGES
+        let arrayTwo = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
+                   var tempData = arrayTwo
+        tempData = arrayTwo.enumerated().map { (i,m) in
+                  let storedImage = m
+        let uiimage = UIImage(contentsOfFile: storedImage.filepath)
+            
+        print("THIS IS TEMPDATA \(tempData)")
+            
+          for idx in tempData.indices {
+              let contestantImageURL = tempData[idx]
+            if let contestantFPO = featureprintObservationForImage(image: uiimage!) {
+                  do {
+                      var distance = Float(0)
+                      try contestantFPO.computeDistance(&distance, to: originalFPO)
+                      ranking.append((contestantIndex: idx, featureprintDistance: distance))
+                  } catch {
+                      print("Error computing distance between featureprints.")
+                  }
+              }
+          }
+          // Sort results based on distance.
+          ranking.sort { (result1, result2) -> Bool in
+              return result1.featureprintDistance < result2.featureprintDistance
+          }
+//          DispatchQueue.main.async {
+//              self.presentResults()
+//          }
+            return storedImage
+      }
+    }
+    
+*/
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
@@ -413,6 +472,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                 }
             }
     
+    
     func showCaptureButton() {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 2) {
@@ -431,13 +491,53 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
                 }
         }
-    
 
-    
-    
+    /*
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == showDetailsSegueID, let detailsVC = segue.destination as? DetailsViewController else {
+            return
+        }
+        // Append original as a first node.
+
+        let realm = try! Realm()
+             let array = realm.objects(StoredImage.self).last
+        var arrayTwo = realm.objects(StoredImage.self)
         
+        let url = URL(fileURLWithPath: array!.filepath)
+            //print("THIS IS URLTWO \(url)")
+        
+        detailsVC.nodes.append((url: url, label: "Original", distance: 0))
+        // Now append contestant images.
+        
+        var urlTwo = arrayTwo.compactMap { _ in URL(string:self.storedImage.filepath) }
+        //print("THIS IS URLTWO \(urlTwo)")
+        
+        for entry in ranking {
+            let idx = entry.contestantIndex
+            let url = urlTwo[idx]
+            detailsVC.nodes.append((url: url, label: "Contestant \(idx + 1)", distance: entry.featureprintDistance))
+        }
     }
+ */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == showDetailsSegueID, let detailsVC = segue.destination as? DetailsViewController else {
+            return
+        }
+        // Append original as a first node.
+       // detailsVC.nodes.append((url: originalImageURL, label: "Original", distance: 0))
+        // Now append contestant images.
+        for entry in ranking {
+            let idx = entry.contestantIndex
+           // let url = contestantImageURLs[idx]
+            //detailsVC.nodes.append((url: url, label: "Contestant \(idx + 1)", distance: entry.featureprintDistance))
+        }
+    }
+    
 
+
+    
+}
 
 
 extension Results {
@@ -446,3 +546,4 @@ extension Results {
         return array
     }
 }
+
