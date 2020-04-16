@@ -77,9 +77,11 @@ class PluginOneImageViewController: UIViewController {
             present(ac, animated: true)
         } else {
             let ac = UIAlertController(title: "Saved!", message: "Image saved to library.", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self]_ in
-                self!.dismiss(animated: true, completion: nil)
-            }))
+            
+//            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self]_ in
+//                self!.dismiss(animated: true, completion: nil)
+//            }))
+            self.dismiss(animated: true, completion: nil)
             present(ac, animated: true)
             
             UserDefaults.standard.removeObject(forKey: "key\(imageSequenceNumber)")

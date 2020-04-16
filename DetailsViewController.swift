@@ -8,25 +8,6 @@ ViewController to display the similarity graph of the contestant's images.
 import UIKit
 import RealmSwift
 
-/*
-// MARK: To retreive IMAGE FROM IMAGE LIBRARY
-   func UIImageFromPath() -> UIImage? {
-       
-       let imageName = "copy"  //your image name here
-       let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
-       let imageUrl: URL = URL(fileURLWithPath: imagePath)
-       print(imagePath)
-
-    guard FileManager.default.fileExists(atPath: imagePath),
-          let imageData: Data = try? Data(contentsOf: imageUrl),
-       let image: UIImage = UIImage(data: imageData) else {
-            return nil //No image found!
-       }
-       return image
-   }
-*/
-
-
 class DetailsCell: UICollectionViewCell {
     static let reuseIdentifier = "DetailsCell"
     
@@ -184,7 +165,7 @@ class DetailsLayout: UICollectionViewLayout {
         let halfItemSize = itemSize / 2
         let layoutMargin = CGFloat(8)
         let numberOfItems = collectionView.numberOfItems(inSection: 0)
-        var shortestDistance = detailsViewController.nodes[1].distance
+        var shortestDistance = detailsViewController.nodes[0].distance
         let longestDistance = detailsViewController.nodes.last!.distance
         if shortestDistance == longestDistance {
             shortestDistance = 0
