@@ -65,7 +65,7 @@ class PluginOneImageViewController: UIViewController {
         }
         
         
-        print(imagePath)
+        //print(imagePath)
     }
     
     
