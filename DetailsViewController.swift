@@ -203,7 +203,7 @@ class DetailsLayout: UICollectionViewLayout {
         let halfItemSize = itemSize / 2
         let layoutMargin = CGFloat(8)
         let numberOfItems = collectionView.numberOfItems(inSection: 0)
-        var shortestDistance = detailsViewController.nodes[1].distance
+        var shortestDistance = detailsViewController.nodes.first!.distance
         let longestDistance = detailsViewController.nodes.last!.distance
         if shortestDistance == longestDistance {
             shortestDistance = 0

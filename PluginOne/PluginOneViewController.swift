@@ -15,13 +15,9 @@ import RealmSwift
 class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     @IBOutlet var addItemView: UIView!
-    
     @IBOutlet weak var visualEffectView: UIVisualEffectView!
-    
     @IBOutlet weak var noLabel: UILabel!
-
     @IBOutlet weak var captureButton: UIButton!
-    
     
     var captureSession = AVCaptureSession()
     var backCamera: AVCaptureDevice?
@@ -33,57 +29,31 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     var framesSeen = UserDefaults.standard.integer(forKey: "framesSeen")
     var imageSequenceNumber = 0
-    var effect:UIVisualEffect!
+    var effect: UIVisualEffect!
     var storedImage = StoredImage()
     let showDetailsSegueID = "ShowDetailsSegue"
     
     var lastImageURL: URL?
-    var storedImageURL = [URL]()
-    func getURL() {
-        let realm = try! Realm()
-        let url = realm.objects(StoredImage.self).last
-        lastImageURL = URL(fileURLWithPath: url!.filepath)
-        let urlTwo = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
-        storedImageURL = urlTwo.compactMap { URL(string:$0.filepath) }
-        print(storedImageURL)
-    }
-    
-
+    var arrayStoredImageURLs = [URL]()
     var ranking = [(contestantIndex: Int, featureprintDistance: Float)]()
-   
     var screenRightEdgeRecognizer: UIScreenEdgePanGestureRecognizer!
-   // let semaphore = DispatchSemaphore(value: PluginOneViewController.maxInflightBuffers)
-    
-
-    /* MARK: To retreive IMAGE FROM IMAGE LIBRARY
-    func imageToModel2() -> UIImage? {
-        
-        let imageName = "copy" // your image name here
-        let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
-        let imageUrl: URL = URL(fileURLWithPath: imagePath)
-        print(imagePath)
-
-     guard FileManager.default.fileExists(atPath: imagePath),
-           let imageData: Data = try? Data(contentsOf: imageUrl),
-        let image: UIImage = UIImage(data: imageData) else {
-             return nil// No image found!
-        }
-        return image
-    }
-*/
-    
-    
     // Popup the runs the first time
     var firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
     
-    // ViewDidLoad
+    @IBAction func dismissButtonPopupView(_ sender: Any) {
+        animateOut()
+    }
+    
+    @IBAction func captureButton(_ sender: Any) {
+        
+        let settings = AVCapturePhotoSettings()
+        photoOutput?.capturePhoto(with: settings, delegate: self)
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Swipe right edge on screen
-//        screenRightEdgeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(screenEdgeSwipedRight))
-//        screenRightEdgeRecognizer.edges = .right
-//        view.addGestureRecognizer(screenRightEdgeRecognizer)
-        
+
         let dataOutput = AVCaptureVideoDataOutput()
         dataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
         captureSession.addOutput(dataOutput)
@@ -115,15 +85,69 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         DispatchQueue.global(qos: .userInitiated).async {
             self.processImagesTwo()
         }
-        
-        
     }
-    
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         captureButtonLayout()
         view.addSubview(captureButton)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupRunningCaptureSession()
+        NoLabel()
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.view.alpha = 1
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        coordinator.animate(alongsideTransition: { (context) -> Void in
+            self.camerapreviewLayer?.connection?.videoOrientation = self.transformOrientation(orientation: UIInterfaceOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!)
+            self.camerapreviewLayer?.frame.size = self.view.frame.size
+        }, completion: { (context) -> Void in
+            
+        })
+        super.viewWillTransition(to: size, with: coordinator)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard segue.identifier == showDetailsSegueID, let detailsVC = segue.destination as? DetailsViewController else {
+            return
+        }
+        // Append original as a first node.
+        let realm = try! Realm()
+        let array = realm.objects(StoredImage.self).last
+        //let arrayTwo = realm.objects(StoredImage.self)
+        
+        let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(array!.filepath)
+        let url = URL(fileURLWithPath: imagePath)
+            //print("THIS IS URLTWO \(url)")
+        
+        detailsVC.nodes.append((url: url, label: "Original", distance: 0))
+        // Now append contestant images.
+        
+        for entry in ranking {
+            let idx = entry.contestantIndex
+            print("THIS IS idX \(idx)")
+            let url = arrayStoredImageURLs[idx]
+            detailsVC.nodes.append((url: url, label: "Contestant \(idx + 1)", distance: entry.featureprintDistance))
+            print("THIS IS RANKING \(ranking)")
+            
+        }
+    }
+    
+    func getURL() {
+        let realm = try! Realm()
+        let url = realm.objects(StoredImage.self).last
+        lastImageURL = URL(fileURLWithPath: url!.filepath)
+        let urlTwo = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
+        arrayStoredImageURLs = urlTwo.compactMap { URL(string:$0.filepath) }
+        print("THIS IS arrayStoredImageURLs \(arrayStoredImageURLs)")
     }
     
     func runFirst() {
@@ -139,7 +163,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
     }
     
-   private func captureButtonLayout() {
+    private func captureButtonLayout() {
     
         // Size the button in preportion to the view
         let buttonSize = view.frame.width * 0.25
@@ -168,18 +192,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupRunningCaptureSession()
-        NoLabel()
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.view.alpha = 1
-    }
-
     func animateIn() {
         self.view.addSubview(addItemView)
         addItemView.center = self.view.center
@@ -192,9 +204,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             self.addItemView.alpha = 1
             self.addItemView.transform = CGAffineTransform.identity
         }
-        
     }
-
     
     func animateOut () {
         UIView.animate(withDuration: 0.3, animations: {
@@ -207,13 +217,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             self.addItemView.removeFromSuperview()
         }
     }
-    
-    @IBAction func dismissButtonPopupView(_ sender: Any) {
-        animateOut()
-    }
-    
-    
-    
+
     func NoLabel() {
         // Hide the label initially
         self.noLabel.isHidden = true
@@ -228,7 +232,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         self.noLabel.textAlignment = .center
         self.noLabel.translatesAutoresizingMaskIntoConstraints = false
     }
-    
     
     func setupCaptureSession() {
         captureSession.sessionPreset = AVCaptureSession.Preset.photo
@@ -276,16 +279,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        coordinator.animate(alongsideTransition: { (context) -> Void in
-            self.camerapreviewLayer?.connection?.videoOrientation = self.transformOrientation(orientation: UIInterfaceOrientation(rawValue: UIApplication.shared.statusBarOrientation.rawValue)!)
-            self.camerapreviewLayer?.frame.size = self.view.frame.size
-        }, completion: { (context) -> Void in
-            
-        })
-        super.viewWillTransition(to: size, with: coordinator)
-    }
-    
     func transformOrientation(orientation: UIInterfaceOrientation) -> AVCaptureVideoOrientation {
         switch orientation {
         case .landscapeLeft:
@@ -311,53 +304,53 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
             performSegue(withIdentifier: "SegueFromPluginOneViewControllerToPluginTwoViewController", sender: Any?.self)
         }
     }
-    func processImages(image: CVPixelBuffer){
-        
-        var observation : VNFeaturePrintObservation? // Stored images
-        var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
-        
-        // sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
-        sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
-        
-        let realm = try! Realm()
-        let array = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
-        
-        var tempData = array
-        tempData = array.enumerated().map { (i,m) in
-            let storedImage = m
-            if let uiimage = UIImage(contentsOfFile: storedImage.filepath){
-                observation = featureprintObservationForImage(image: uiimage)
-                //print(observation)
-                
-                do {
-                    var distance = Float(0)
-                    if let sourceObservation = sourceObservation{
-                        try observation?.computeDistance(&distance, to: sourceObservation)
-                        
-                        // Threshold value
-                        DispatchQueue.main.asyncAfter(deadline: .now()) {
-                            //print(distance)
-                            self.showCaptureButton()
-                            let distanceTwo = String(format:"%.2f",(distance))
-                            self.captureButton.setTitle(distanceTwo, for: .normal)
-                            
-                            
-                            if distance < 12.5 {
-                                print(distance)
-                                //print(storedImage.filepath)
-                                print ("match")
-                                self.hideCaptureButton()
-                            }
-                        }
-                    }
-                    
-                } catch {
-                    print("errror occurred..")
-                }
-            }
-            return storedImage
-        }
-    }
+    
+     func processImages(image: CVPixelBuffer){
+           
+           var observation : VNFeaturePrintObservation? // Stored images
+           var sourceObservation : VNFeaturePrintObservation? // image from pixel buffer
+           
+           // sourceObservation = featureprintObservationForImage(image: UIImage(named: sourceImage)!)
+           sourceObservation = featureprintObservationForCVPixelBuffer(image: image)
+           
+           let realm = try! Realm()
+           let array = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
+           
+           var tempData = array
+           tempData = array.enumerated().map { (i,m) in
+               let storedImage = m
+               if let uiimage = UIImage(contentsOfFile: storedImage.filepath){
+                   observation = featureprintObservationForImage(image: uiimage)
+                   
+                   do {
+                       var distance = Float(0)
+                       if let sourceObservation = sourceObservation{
+                           try observation?.computeDistance(&distance, to: sourceObservation)
+                           
+                           // Threshold value
+                           DispatchQueue.main.asyncAfter(deadline: .now()) {
+                               //print(distance)
+                               self.showCaptureButton()
+                               let distanceTwo = String(format:"%.2f",(distance))
+                               self.captureButton.setTitle(distanceTwo, for: .normal)
+                               
+                               
+                               if distance < 12.5 {
+                                   print(distance)
+                                   //print(storedImage.filepath)
+                                   print ("match")
+                                   self.hideCaptureButton()
+                               }
+                           }
+                       }
+                       
+                   } catch {
+                       print("errror occurred..")
+                   }
+               }
+               return storedImage
+           }
+       }
     
     func processImagesTwo() {
         
@@ -371,14 +364,15 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
         // Generate featureprints for copies and compute distances from original featureprint.
        
-        for idx in storedImageURL.indices {
+        for idx in arrayStoredImageURLs.indices {
             print("THIS IS idX \(idx)")
-            let contestantImageURL = storedImageURL[idx]
+            let contestantImageURL = arrayStoredImageURLs[idx]
             if let contestantFPO = featureprintObservationForURL(atURL: contestantImageURL) {
                 do {
                     var distance = Float(0)
                     try contestantFPO.computeDistance(&distance, to: originalFPO)
                     ranking.append((contestantIndex: idx, featureprintDistance: distance))
+                     print("THIS IS Ranking \(ranking)")
                 } catch {
                     print("Error computing distance between featureprints.")
                 }
@@ -390,8 +384,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
     }
     
-
-
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         framesSeen += 1
@@ -415,45 +407,32 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
               
           }
       }
-    
-    
-    @IBAction func captureButton(_ sender: Any) {
-        
-        let settings = AVCapturePhotoSettings()
-        photoOutput?.capturePhoto(with: settings, delegate: self)
-        
-    }
-    
 
-    
-    //FeaturePrintObservation on CvPixelBuffer
-        func featureprintObservationForCVPixelBuffer(image: CVPixelBuffer) -> VNFeaturePrintObservation? {
-            let requestHandler = VNImageRequestHandler(cvPixelBuffer: image, options: [:])
-            let request = VNGenerateImageFeaturePrintRequest()
-            do {
-                try requestHandler.perform([request])
-                return request.results?.first as? VNFeaturePrintObservation
-            } catch {
-                print("Vision error: \(error)")
-                return nil
-            }
+    func featureprintObservationForCVPixelBuffer(image: CVPixelBuffer) -> VNFeaturePrintObservation? {
+        let requestHandler = VNImageRequestHandler(cvPixelBuffer: image, options: [:])
+        let request = VNGenerateImageFeaturePrintRequest()
+        do {
+            try requestHandler.perform([request])
+            return request.results?.first as? VNFeaturePrintObservation
+        } catch {
+            print("Vision error: \(error)")
+            return nil
         }
+    }
  
-       //FeaturePrintObservation on UIIMAGE
-            func featureprintObservationForImage(image: UIImage) -> VNFeaturePrintObservation? {
-                let requestHandler = VNImageRequestHandler(cgImage: image.cgImage!, options: [:])
-                let request = VNGenerateImageFeaturePrintRequest()
-                print("REQUEST UIIMAGE URL: \(request)")
-                do {
-                    try requestHandler.perform([request])
-                    return request.results?.first as? VNFeaturePrintObservation
-                } catch {
-                    print("Vision error: \(error)")
-                    return nil
-                }
-            }
-    //TODO: PLUGIN with URL
-    //FeaturePrintObservation with URL
+    func featureprintObservationForImage(image: UIImage) -> VNFeaturePrintObservation? {
+        let requestHandler = VNImageRequestHandler(cgImage: image.cgImage!, options: [:])
+        let request = VNGenerateImageFeaturePrintRequest()
+        print("REQUEST UIIMAGE URL: \(request)")
+        do {
+            try requestHandler.perform([request])
+            return request.results?.first as? VNFeaturePrintObservation
+        } catch {
+            print("Vision error: \(error)")
+            return nil
+        }
+    }
+
     func featureprintObservationForURL(atURL url: URL) -> VNFeaturePrintObservation? {
         let requestHandler = VNImageRequestHandler(url: url, options: [:])
            let request = VNGenerateImageFeaturePrintRequest()
@@ -466,7 +445,6 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
            }
        }
     
-    
     func showCaptureButton() {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 2) {
@@ -477,34 +455,16 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         }
     }
     
-        func hideCaptureButton() {
-            DispatchQueue.main.async {
-             self.captureButton.alpha = 0
-                self.noLabel.isHidden = false
-                self.noLabel.text = "computer says NO"
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-                }
-        }
-
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard segue.identifier == showDetailsSegueID, let detailsVC = segue.destination as? DetailsViewController else {
-            return
-        }
-        // Append original as a first node.
-        
-        detailsVC.nodes.append((url: lastImageURL, label: "Original", distance: 0))
-        // Now append contestant images.
-        
-        for entry in ranking {
-            let idx = entry.contestantIndex
-            print("THIS IS idX \(idx)")
-            let url = storedImageURL[idx]
-            detailsVC.nodes.append((url: url, label: "Contestant \(idx + 1)", distance: entry.featureprintDistance))
-            print("THIS IS RANKING \(ranking)")
-            
-        }
+    func hideCaptureButton() {
+        DispatchQueue.main.async {
+         self.captureButton.alpha = 0
+            self.noLabel.isHidden = false
+            self.noLabel.text = "computer says NO"
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            }
     }
+    
+    
 
 }
 

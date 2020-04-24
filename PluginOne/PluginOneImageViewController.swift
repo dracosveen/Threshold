@@ -46,26 +46,24 @@ class PluginOneImageViewController: UIViewController {
     @IBAction func saveButton(_ sender: Any) {
         UIImageWriteToSavedPhotosAlbum(imageView.image!, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
         
-        let uuid = UUID().uuidString
-        let imageName = uuid // your image name here
-        let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
-        let imageUrl: URL = URL(fileURLWithPath: imagePath)
-        
         let newImage: UIImage = imageView.image!
-        try? newImage.pngData()?.write(to: imageUrl)
+        let imageFileName = "\(UUID().uuidString).png"
+        let imagePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(imageFileName)
+        
+        let data = newImage.pngData()
+        do {
+            try data?.write(to: URL(fileURLWithPath: imagePath))
+        } catch {
+            print("error")
+        }
         
         let realm = try! Realm()
         try! realm.write {
             
-            let newImageURL: Data = try Data(contentsOf: imageUrl)
             let addedFilePath = StoredImage()
-            addedFilePath.filepath = imagePath
+            addedFilePath.filepath = imageFileName
             realm.add(addedFilePath)
-
         }
-        
-        
-        //print(imagePath)
     }
     
     
