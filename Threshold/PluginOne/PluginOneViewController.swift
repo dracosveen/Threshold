@@ -148,7 +148,7 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
         // fixed image pathing issue (RMC)
         lastImageURL = URL(fileURLWithPath: defaultPath.appendingPathComponent(url!.filepath))
         let urlTwo = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
-        arrayStoredImageURLs = urlTwo.compactMap { URL(string: defaultPath.appendingPathComponent($0.filepath)) }
+        arrayStoredImageURLs = urlTwo.compactMap { URL(fileURLWithPath: defaultPath.appendingPathComponent($0.filepath)) }
         print("THIS IS arrayStoredImageURLs \(arrayStoredImageURLs)")
     }
     
@@ -430,17 +430,16 @@ class PluginOneViewController: UIViewController, AVCapturePhotoCaptureDelegate, 
     }
 
     func featureprintObservationForURL(atURL url: URL) -> VNFeaturePrintObservation? {
-        // needed to add path here as only file name is in
         let requestHandler = VNImageRequestHandler(url: url, options: [:])
-           let request = VNGenerateImageFeaturePrintRequest()
-           do {
-               try requestHandler.perform([request])
-               return request.results?.first as? VNFeaturePrintObservation
-           } catch {
-               print("Vision error: \(error)")
-               return nil
-           }
-       }
+        let request = VNGenerateImageFeaturePrintRequest()
+        do {
+            try requestHandler.perform([request])
+            return request.results?.first as? VNFeaturePrintObservation
+        } catch {
+            print("Vision error: \(error)")
+            return nil
+        }
+    }
     
     func showCaptureButton() {
         DispatchQueue.main.async {
