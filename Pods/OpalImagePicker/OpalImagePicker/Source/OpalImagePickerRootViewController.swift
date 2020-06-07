@@ -119,7 +119,6 @@ open class OpalImagePickerRootViewController: UIViewController {
     private var isCompleted = false
     private var photosCompleted = 0
     private var savedImages: [UIImage] = []
-    private var imagesDict: [IndexPath: UIImage] = [:]
     private var showExternalImages = false
     private var selectedIndexPaths: [IndexPath] = []
     private var externalSelectedIndexPaths: [IndexPath] = []
@@ -184,7 +183,11 @@ open class OpalImagePickerRootViewController: UIViewController {
     private func setup(collectionView: UICollectionView) {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.allowsMultipleSelection = true
-        collectionView.backgroundColor = .white
+        if #available(iOS 13.0, *) {
+            collectionView.backgroundColor = .systemBackground
+        } else {
+            collectionView.backgroundColor = .white
+        }
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(ImagePickerCollectionViewCell.self, forCellWithReuseIdentifier: ImagePickerCollectionViewCell.reuseId)
@@ -234,7 +237,7 @@ open class OpalImagePickerRootViewController: UIViewController {
         }
         
         if let allowedMediaSubtypes = self.allowedMediaSubtypes {
-            let mediaSubtypes = NSPredicate(format: "mediaSubtypes = %d", allowedMediaSubtypes.rawValue)
+            let mediaSubtypes = NSPredicate(format: "(mediaSubtype & %d) == 0", allowedMediaSubtypes.rawValue)
             predicates += [mediaSubtypes]
         }
         
@@ -305,48 +308,10 @@ open class OpalImagePickerRootViewController: UIViewController {
             selectedURLs += [url]
         }
         delegate?.imagePicker?(imagePicker, didFinishPickingExternalURLs: selectedURLs)
-        
-        guard shouldExpandImagesFromAssets() else { return }
-        let manager = PHImageManager.default()
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.isSynchronous = true
-        options.isNetworkAccessAllowed = true
-        
-        for asset in photoAssets {
-            manager.requestImageData(for: asset, options: options, resultHandler: { [weak self] (data, _, _, _) in
-                guard let strongSelf = self,
-                    let data = data,
-                    let image = UIImage(data: data) else { return }
-                strongSelf.savedImages += [image]
-            })
-        }
-        delegate?.imagePicker?(imagePicker, didFinishPickingImages: savedImages)
-        savedImages = []
-    }
-    
-    private func shouldExpandImagesFromAssets() -> Bool {
-        //Only expand images if didFinishPickingAssets is implemented in delegate.
-        if let delegate = self.delegate as? NSObject,
-            delegate.responds(to: #selector(OpalImagePickerControllerDelegate.imagePicker(_:didFinishPickingImages:))) {
-            return true
-        } else if !(delegate is NSObject) {
-            return true
-        }
-        return false
     }
     
     private func set(image: UIImage?, indexPath: IndexPath, isExternal: Bool) {
         update(isSelected: image != nil, isExternal: isExternal, for: indexPath)
-        
-        // Only store images if delegate method is implemented
-        if let nsDelegate = delegate as? NSObject,
-            !nsDelegate.responds(to: #selector(OpalImagePickerControllerDelegate.imagePicker(_:didFinishPickingImages:))) {
-            return
-        }
-        
-        let key = IndexPath(item: indexPath.item, section: isExternal ? 1 : 0)
-        imagesDict[key] = image
     }
     
     private func update(isSelected: Bool, isExternal: Bool, for indexPath: IndexPath) {
@@ -359,11 +324,6 @@ open class OpalImagePickerRootViewController: UIViewController {
         } else {
             selectedIndexPaths = selectedIndexPaths.filter { $0 != indexPath }
         }
-    }
-    
-    private func get(imageForIndexPath indexPath: IndexPath, isExternal: Bool) -> UIImage? {
-        let key = IndexPath(item: indexPath.item, section: isExternal ? 1 : 0)
-        return imagesDict[key]
     }
     
     @available(iOS 9.0, *)
