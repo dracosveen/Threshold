@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -126,7 +125,7 @@
                     <viewLayoutGuide key="safeArea" id="k9r-yw-sKZ"/>
                 </view>
             </objects>
-            <point key="canvasLocation" x="2" y="114"/>
+            <point key="canvasLocation" x="-1538" y="-458"/>
         </scene>
         <!--Details View Controller-->
         <scene sceneID="yzQ-If-dUt">
@@ -174,7 +173,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tns-pe-ed9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1247" y="-570"/>
+            <point key="canvasLocation" x="41" y="-933"/>
         </scene>
         <!--Review Image View Controller-->
         <scene sceneID="vM7-tN-c60">
@@ -228,7 +227,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BVN-YS-8x3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2194" y="-570"/>
+            <point key="canvasLocation" x="820" y="-933"/>
         </scene>
         <!--Image View Controller-->
         <scene sceneID="9Py-XX-W4y">
@@ -240,76 +239,46 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YyD-nm-RTI">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="sfm-OW-jJr">
-                                <rect key="frame" x="0.0" y="44" width="375" height="22"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-A0-pg9">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="22"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3wj-uR-PMh">
-                                                <rect key="frame" x="0.0" y="0.0" width="119.66666666666667" height="22"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ky-Mw-F8z">
-                                                        <rect key="frame" x="17.999999999999996" y="28" width="63.666666666666657" height="33"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
-                                                        <state key="normal" title="Back">
-                                                            <color key="titleColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="backButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="GLT-xW-6vs"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstItem="4ky-Mw-F8z" firstAttribute="leading" secondItem="3wj-uR-PMh" secondAttribute="leadingMargin" constant="10" id="BS1-wD-MJo"/>
-                                                    <constraint firstItem="4ky-Mw-F8z" firstAttribute="top" secondItem="3wj-uR-PMh" secondAttribute="topMargin" constant="20" id="CDm-hG-IGF"/>
-                                                    <constraint firstAttribute="trailingMargin" secondItem="4ky-Mw-F8z" secondAttribute="trailing" constant="30" id="CkL-jJ-wWr"/>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="4ky-Mw-F8z" secondAttribute="bottom" constant="20" id="OKd-Kj-9x3"/>
-                                                </constraints>
-                                            </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QAJ-2D-Kie">
-                                                <rect key="frame" x="127.66666666666666" y="0.0" width="119.66666666666666" height="22"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qfd-fy-5op">
-                                                <rect key="frame" x="255.33333333333334" y="0.0" width="119.66666666666666" height="22"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQH-bY-iiE">
-                                                        <rect key="frame" x="37.999999999999972" y="18" width="63.666666666666657" height="33"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
-                                                        <state key="normal" title="Save"/>
-                                                        <connections>
-                                                            <action selector="saveButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="46m-Jg-85W"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="YQH-bY-iiE" secondAttribute="bottom" constant="10" id="5r0-Tb-R4J"/>
-                                                    <constraint firstAttribute="trailingMargin" secondItem="YQH-bY-iiE" secondAttribute="trailing" constant="10" id="Eif-jK-kgQ"/>
-                                                    <constraint firstItem="YQH-bY-iiE" firstAttribute="leading" secondItem="Qfd-fy-5op" secondAttribute="leadingMargin" constant="30" id="vUS-Oi-dTa"/>
-                                                    <constraint firstItem="YQH-bY-iiE" firstAttribute="top" secondItem="Qfd-fy-5op" secondAttribute="topMargin" constant="10" id="zHK-9w-iTZ"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ky-Mw-F8z">
+                                <rect key="frame" x="4.9999999999999964" y="44" width="63.666666666666657" height="33"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="33" id="VOx-ob-dc7"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="63.670000000000002" id="kh8-mx-f0u"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Back">
+                                    <color key="titleColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="GLT-xW-6vs"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQH-bY-iiE">
+                                <rect key="frame" x="306.33333333333331" y="44" width="63.666666666666686" height="33"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="33" id="oGi-hC-DBx"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="63.670000000000002" id="zIX-S8-vMK"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="saveButton:" destination="huP-yO-AEN" eventType="touchUpInside" id="46m-Jg-85W"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="sfm-OW-jJr" firstAttribute="leading" secondItem="13j-6O-P79" secondAttribute="leading" id="d4W-HJ-s2g"/>
-                            <constraint firstItem="sfm-OW-jJr" firstAttribute="centerX" secondItem="0Ac-56-fSa" secondAttribute="centerX" id="lG4-d1-4pT"/>
-                            <constraint firstItem="YyD-nm-RTI" firstAttribute="trailing" secondItem="13j-6O-P79" secondAttribute="trailing" id="npa-1a-ztg"/>
-                            <constraint firstItem="13j-6O-P79" firstAttribute="bottom" secondItem="YyD-nm-RTI" secondAttribute="bottom" constant="-34" id="qai-mY-YQu"/>
-                            <constraint firstItem="YyD-nm-RTI" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" constant="-44" id="uFv-BS-NQD"/>
-                            <constraint firstItem="13j-6O-P79" firstAttribute="bottom" secondItem="sfm-OW-jJr" secondAttribute="bottom" constant="712" id="xqI-KW-93d"/>
-                            <constraint firstItem="YyD-nm-RTI" firstAttribute="leading" secondItem="13j-6O-P79" secondAttribute="leading" id="zJS-Jj-EUS"/>
-                            <constraint firstItem="sfm-OW-jJr" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" id="zoY-Z6-QgU"/>
-                            <constraint firstItem="sfm-OW-jJr" firstAttribute="width" secondItem="0Ac-56-fSa" secondAttribute="width" id="zqg-AQ-Qit"/>
+                            <constraint firstItem="YQH-bY-iiE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="4ky-Mw-F8z" secondAttribute="trailing" constant="8" symbolic="YES" id="8hK-kJ-FKI"/>
+                            <constraint firstItem="4ky-Mw-F8z" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" id="Rh2-uZ-luW"/>
+                            <constraint firstItem="YQH-bY-iiE" firstAttribute="top" secondItem="13j-6O-P79" secondAttribute="top" id="b6v-Hn-Lc4"/>
+                            <constraint firstItem="13j-6O-P79" firstAttribute="trailing" secondItem="YQH-bY-iiE" secondAttribute="trailing" constant="5" id="jVJ-bl-YQU"/>
+                            <constraint firstItem="YyD-nm-RTI" firstAttribute="trailing" secondItem="0Ac-56-fSa" secondAttribute="trailing" id="npa-1a-ztg"/>
+                            <constraint firstAttribute="bottom" secondItem="YyD-nm-RTI" secondAttribute="bottom" id="qai-mY-YQu"/>
+                            <constraint firstItem="4ky-Mw-F8z" firstAttribute="leading" secondItem="13j-6O-P79" secondAttribute="leading" constant="5" id="r0h-sG-kf1"/>
+                            <constraint firstItem="YyD-nm-RTI" firstAttribute="top" secondItem="0Ac-56-fSa" secondAttribute="top" id="uFv-BS-NQD"/>
+                            <constraint firstItem="YyD-nm-RTI" firstAttribute="leading" secondItem="0Ac-56-fSa" secondAttribute="leading" id="zJS-Jj-EUS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="13j-6O-P79"/>
                     </view>
@@ -321,7 +290,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="we4-yz-oDv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="865" y="114"/>
+            <point key="canvasLocation" x="-706" y="-236"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="TBH-pO-Djb">
@@ -359,7 +328,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dOZ-h5-3Vq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1682" y="114"/>
+            <point key="canvasLocation" x="-1538" y="226"/>
         </scene>
         <!--Welcome View Controller-->
         <scene sceneID="33t-sc-pcV">
@@ -428,7 +397,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qTv-CX-3wJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-871" y="114"/>
+            <point key="canvasLocation" x="-705" y="-924"/>
         </scene>
     </scenes>
 </document>

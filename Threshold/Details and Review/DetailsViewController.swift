@@ -67,21 +67,20 @@ class DetailsBackgroundView: UICollectionReusableView {
 class DetailsViewController: UICollectionViewController {
     
     var nodes = [(url: URL?, label: String, distance: Float)]()
-    
-        var detailsLayout: DetailsLayout {
+    var detailsLayout: DetailsLayout {
         guard let detailsLayout = collectionViewLayout as? DetailsLayout else {
             fatalError("Unexpected layout type.")
         }
         return detailsLayout
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.register(DetailsBackgroundView.self,
                                 forSupplementaryViewOfKind: DetailsLayout.backgroundViewKind,
                                 withReuseIdentifier: DetailsBackgroundView.reuseIdentifier)
-        
-
     }
     
     override func viewWillAppear(_ animated: Bool) {

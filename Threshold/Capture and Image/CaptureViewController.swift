@@ -188,49 +188,49 @@ class CaptureViewController: UIViewController, AVCapturePhotoCaptureDelegate, AV
         if segue.identifier == "detailSegue" {
             let detailsVC = segue.destination as! DetailsViewController
                 
-                //getRank()
-                             // Append original as a first node.
-                             let realm = try! Realm()
-                             let array = realm.objects(StoredImage.self).last
-                             
-                             let date = array!.created
-                             //print("THIS IS array \(array)")
-                             
-                             detailsVC.nodes.append((url: lastImageURL, label: date, distance: 0))
-                             // Now append contestant images.
-                             
-                             let arrayTwo = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
-                             let datePath = arrayTwo.map { String(($0.created)) }
-                             
-                             // Ranking.prefix indicate the number of items being displayed.        
-                                for entry in ranking.prefix(5) {
-                                let idx = entry.contestantIndex
-                                let url = arrayStoredImageURLs[idx]
-                                let label = datePath[idx]
-                                detailsVC.nodes.append((url: url, label: label, distance: entry.featureprintDistance))
+            //getRank()
+            // Append original as a first node.
+            let realm = try! Realm()
+            let array = realm.objects(StoredImage.self).last
+            
+            if array == nil { return }
+            let date = array!.created
+            //print("THIS IS array \(array)")
+            
+            detailsVC.nodes.append((url: lastImageURL, label: date, distance: 0))
+            // Now append contestant images.
+             
+            let arrayTwo = realm.objects(StoredImage.self).toArray(ofType: StoredImage.self)
+            let datePath = arrayTwo.map { String(($0.created)) }
+         
+            // Ranking.prefix indicate the number of items being displayed.
+            for entry in ranking.prefix(5) {
+                let idx = entry.contestantIndex
+                let url = arrayStoredImageURLs[idx]
+                let label = datePath[idx]
+                detailsVC.nodes.append((url: url, label: label, distance: entry.featureprintDistance))
             }
         }
     }
     
-func setupScreens() {
-    for index in 0..<pageCopy.count {
-        
-        frame.origin.x = scrollViewController.frame.size.width * CGFloat(index)
-        frame.size = scrollViewController.frame.size
+    func setupScreens() {
+        for index in 0..<pageCopy.count {
+            frame.origin.x = scrollViewController.frame.size.width * CGFloat(index)
+            frame.size = scrollViewController.frame.size
 
-         let textView = UILabel(frame: frame)
-        textView.textColor = UIColor.darkGray
-         textView.textAlignment = .center
-         textView.numberOfLines = 0
+            let textView = UILabel(frame: frame)
+            textView.textColor = UIColor.darkGray
+            textView.textAlignment = .center
+            textView.numberOfLines = 0
 
-        textView.text = pageCopy[index]
-        
-        self.scrollViewController.addSubview(textView)
+            textView.text = pageCopy[index]
+            
+            self.scrollViewController.addSubview(textView)
+        }
+
+        scrollViewController.contentSize = CGSize(width: (scrollViewController.frame.size.width * CGFloat(pageCopy.count)), height: scrollViewController.frame.size.height)
+        scrollViewController.delegate = self
     }
-
-    scrollViewController.contentSize = CGSize(width: (scrollViewController.frame.size.width * CGFloat(pageCopy.count)), height: scrollViewController.frame.size.height)
-    scrollViewController.delegate = self
-}
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageNumber = scrollViewController.contentOffset.x / scrollViewController.frame.size.width
@@ -458,8 +458,12 @@ func setupScreens() {
    
      func getRank() {
          
-         guard let originalURL = lastImageURL else {return}
-         guard let originalFPO = featureprintObservationForURL(atURL: originalURL) else {return}
+        guard let originalURL = lastImageURL else {return}
+        guard let originalFPO = featureprintObservationForURL(atURL: originalURL) else {return}
+        
+        // because ranking is a global array you need to clear it each time
+        // else you are going to get duplicates the whole time
+        ranking.removeAll()
         
         let temp = arrayStoredImageURLs.dropLast()
         for idx in temp.indices {
