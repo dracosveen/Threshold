@@ -29,7 +29,6 @@
 #import "RLMProperty.h"
 #import "RLMProperty_Private.h"
 #import "RLMQueryUtil.hpp"
-#import "RLMRealmConfiguration+Sync.h"
 #import "RLMRealmConfiguration_Private.hpp"
 #import "RLMRealmUtil.hpp"
 #import "RLMSchema_Private.hpp"
@@ -403,7 +402,6 @@ REALM_NOINLINE static void translateSharedGroupOpenException(RLMRealmConfigurati
             case RealmFileException::Kind::IncompatibleSyncedRealm: {
                 RLMRealmConfiguration *configuration = [originalConfiguration copy];
                 configuration.fileURL = [NSURL fileURLWithPath:@(ex.path().data())];
-                configuration.syncConfiguration = nil;
                 configuration.readOnly = YES;
 
                 NSError *intermediateError = RLMMakeError(RLMErrorIncompatibleSyncedFile, ex);

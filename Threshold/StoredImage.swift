@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 class StoredImage: Object {
-  @objc dynamic var created = Date()
+  @objc dynamic var created = String()
     @objc dynamic var filepath = ""
     @objc dynamic var distance = Float()
     

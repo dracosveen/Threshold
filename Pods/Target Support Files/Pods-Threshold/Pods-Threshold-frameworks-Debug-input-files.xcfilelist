@@ -1,3 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-Threshold/Pods-Threshold-frameworks.sh
+${BUILT_PRODUCTS_DIR}/OpalImagePicker/OpalImagePicker.framework
 ${BUILT_PRODUCTS_DIR}/Realm/Realm.framework
 ${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework

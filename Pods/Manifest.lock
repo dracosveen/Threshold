@@ -1,22 +1,26 @@
 PODS:
-  - Realm (4.4.1):
-    - Realm/Headers (= 4.4.1)
-  - Realm/Headers (4.4.1)
-  - RealmSwift (4.4.1):
-    - Realm (= 4.4.1)
+  - OpalImagePicker (2.1.2)
+  - Realm (4.3.1):
+    - Realm/Headers (= 4.3.1)
+  - Realm/Headers (4.3.1)
+  - RealmSwift (4.3.1):
+    - Realm (= 4.3.1)
 
 DEPENDENCIES:
+  - OpalImagePicker
   - RealmSwift
 
 SPEC REPOS:
   trunk:
+    - OpalImagePicker
     - Realm
     - RealmSwift
 
 SPEC CHECKSUMS:
-  Realm: 4eb04d7487bd43c0581256f40b424eafb711deff
-  RealmSwift: 3eb8924ff7100df5928c7602f71d0fec51e7c9c5
+  OpalImagePicker: 51cbf714f337a93c2631219f1a90389ba936077f
+  Realm: 31dc40934081ef740f60feedc46d88473cbfeb40
+  RealmSwift: b5199e9a41f67b99f51acf6874a6166f5fbe93d1
 
-PODFILE CHECKSUM: 84152a3e79d4062e7f452ffc94dcb6c70f2921ee
+PODFILE CHECKSUM: 8ab6f4426a760309f9fab866fb688b9fe84291ba
 
 COCOAPODS: 1.8.4

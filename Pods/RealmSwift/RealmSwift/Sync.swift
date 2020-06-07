@@ -930,10 +930,10 @@ public struct SyncSubscription: RealmCollectionValue {
 
 // :nodoc:
 extension SyncSubscription: CustomObjectiveCBridgeable {
-    internal static func bridging(objCValue: Any) -> SyncSubscription {
+    static func bridging(objCValue: Any) -> SyncSubscription {
         return ObjectiveCSupport.convert(object: RLMCastToSyncSubscription(objCValue))
     }
-    internal var objCValue: Any {
+    var objCValue: Any {
         return 0
     }
 }
